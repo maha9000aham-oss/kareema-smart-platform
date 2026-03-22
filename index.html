@@ -6,84 +6,128 @@
 <title>منصة كريمة بنت همام الذكية</title>
 
 <style>
-body {
-    font-family: sans-serif;
-    background: #f4f7fb;
-    margin: 0;
+:root{
+--primary:#6c3fc7;
+--secondary:#9b6dff;
+--bg:#f5f3ff;
+--white:#ffffff;
 }
 
-.container {
-    max-width: 900px;
-    margin: auto;
-    padding: 20px;
+body{
+margin:0;
+font-family:sans-serif;
+background:var(--bg);
 }
 
-.header {
-    background: #1f7a6d;
-    color: white;
-    padding: 40px;
-    border-radius: 20px;
-    text-align: center;
+/* الهيدر */
+.hero{
+background: linear-gradient(135deg, var(--primary), var(--secondary));
+color:white;
+padding:60px 20px;
+text-align:center;
+border-radius:0 0 30px 30px;
 }
 
-button {
-    padding: 12px 20px;
-    border-radius: 10px;
-    border: none;
-    cursor: pointer;
-    font-size: 16px;
+.hero h1{
+margin:0;
+font-size:28px;
 }
 
-.start-btn {
-    background: white;
-    color: #1f7a6d;
-    margin-top: 20px;
+.hero p{
+opacity:0.9;
+margin-top:10px;
 }
 
-.card {
-    background: white;
-    padding: 20px;
-    border-radius: 15px;
-    margin-top: 20px;
+.start-btn{
+margin-top:20px;
+background:white;
+color:var(--primary);
+padding:12px 25px;
+border:none;
+border-radius:12px;
+font-size:16px;
+cursor:pointer;
 }
 
-.option {
-    display: block;
-    padding: 12px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    margin: 10px 0;
-    cursor: pointer;
+/* القسم */
+.container{
+padding:20px;
+max-width:900px;
+margin:auto;
 }
+
+.card{
+background:white;
+padding:20px;
+border-radius:20px;
+margin-top:-30px;
+box-shadow:0 10px 30px rgba(0,0,0,0.1);
+}
+
+/* الأزرار */
+.section-btn{
+padding:10px 15px;
+border:none;
+border-radius:10px;
+margin:5px;
+background:#eee;
+cursor:pointer;
+}
+
+.section-btn:hover{
+background:var(--primary);
+color:white;
+}
+
+/* الأسئلة */
+.option{
+display:block;
+padding:12px;
+border:1px solid #ddd;
+border-radius:10px;
+margin:10px 0;
+cursor:pointer;
+}
+
+.next-btn{
+background:var(--primary);
+color:white;
+margin-top:10px;
+}
+
 </style>
 </head>
 
 <body>
 
-<div class="container">
-
-<div class="header" id="home">
+<!-- الهيدر -->
+<div class="hero" id="home">
 <h1>منصة كريمة بنت همام الذكية</h1>
 <p>منافسون للقمة</p>
-<button class="start-btn" onclick="chooseSection()">ابدئي التدريب الآن</button>
+<button class="start-btn" onclick="showSections()">ابدئي التدريب الآن</button>
 </div>
 
-<div id="section" style="display:none" class="card">
+<div class="container">
+
+<!-- اختيار المجال -->
+<div id="sections" class="card" style="display:none">
 <h3>اختاري المجال</h3>
-<button onclick="startQuiz()">رياضيات</button>
-<button onclick="startQuiz()">قراءة</button>
-<button onclick="startQuiz()">علوم</button>
+<button class="section-btn" onclick="startQuiz()">رياضيات</button>
+<button class="section-btn" onclick="startQuiz()">قراءة</button>
+<button class="section-btn" onclick="startQuiz()">علوم</button>
 </div>
 
-<div id="quiz" style="display:none" class="card">
+<!-- الاختبار -->
+<div id="quiz" class="card" style="display:none">
 <h3 id="question"></h3>
 <div id="options"></div>
-<button onclick="nextQuestion()">التالي</button>
+<button class="next-btn" onclick="nextQuestion()">التالي</button>
 </div>
 
-<div id="result" style="display:none" class="card">
+<!-- النتيجة -->
+<div id="result" class="card" style="display:none">
 <h2 id="score"></h2>
-<button onclick="restart()">إعادة المحاولة</button>
+<button onclick="location.reload()">إعادة المحاولة</button>
 </div>
 
 </div>
@@ -92,60 +136,52 @@ button {
 
 let questions = [
 {
-q: "كم ناتج 3 + 5 ؟",
-options: ["6","7","8","9"],
-answer: "8"
+q:"كم ناتج 3 + 5 ؟",
+options:["6","7","8","9"],
+answer:"8"
 }
 ];
 
-let current = 0;
-let score = 0;
+let current=0;
+let score=0;
 
-function chooseSection(){
-document.getElementById("home").style.display="none";
-document.getElementById("section").style.display="block";
+function showSections(){
+document.getElementById("sections").style.display="block";
 }
 
 function startQuiz(){
-document.getElementById("section").style.display="none";
+document.getElementById("sections").style.display="none";
 document.getElementById("quiz").style.display="block";
 showQuestion();
 }
 
 function showQuestion(){
-let q = questions[current];
-document.getElementById("question").innerText = q.q;
+let q=questions[current];
+document.getElementById("question").innerText=q.q;
 
-let optionsHTML = "";
+let html="";
 q.options.forEach(opt=>{
-optionsHTML += `<div class="option" onclick="selectAnswer('${opt}')">${opt}</div>`;
+html+=`<div class="option" onclick="selectAnswer('${opt}')">${opt}</div>`;
 });
-document.getElementById("options").innerHTML = optionsHTML;
+
+document.getElementById("options").innerHTML=html;
 }
 
 function selectAnswer(opt){
-if(opt === questions[current].answer){
+if(opt===questions[current].answer){
 score++;
 }
 }
 
 function nextQuestion(){
 current++;
-if(current < questions.length){
+if(current<questions.length){
 showQuestion();
 }else{
-showResult();
-}
-}
-
-function showResult(){
 document.getElementById("quiz").style.display="none";
 document.getElementById("result").style.display="block";
-document.getElementById("score").innerText = "درجتك: " + score;
+document.getElementById("score").innerText="درجتك: "+score;
 }
-
-function restart(){
-location.reload();
 }
 
 </script>
