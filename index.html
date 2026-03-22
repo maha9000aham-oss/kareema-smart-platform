@@ -8,13 +8,17 @@
     :root{
       --primary:#5B2D91;
       --secondary:#7B4FC9;
+      --accent:#A78BFA;
       --bg:#F6F2FF;
       --surface:#FFFFFF;
       --text:#231942;
       --muted:#6B6480;
       --border:#E7DDF7;
       --soft:#F1EAFF;
-      --shadow:0 12px 30px rgba(68,35,118,0.12);
+      --success:#14804A;
+      --danger:#C0392B;
+      --warning:#F59E0B;
+      --shadow:0 14px 34px rgba(68,35,118,0.12);
       --radius-xl:28px;
       --radius-lg:22px;
       --radius-md:16px;
@@ -27,6 +31,40 @@
       font-family: Arial, sans-serif;
       background:var(--bg);
       color:var(--text);
+    }
+
+    .hidden{ display:none !important; }
+
+    .loading-screen{
+      position:fixed;
+      inset:0;
+      background:linear-gradient(135deg,var(--primary),var(--secondary));
+      color:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex-direction:column;
+      z-index:9999;
+      transition:opacity .4s ease, visibility .4s ease;
+    }
+
+    .loading-screen.hide{
+      opacity:0;
+      visibility:hidden;
+    }
+
+    .loader-ring{
+      width:76px;
+      height:76px;
+      border:6px solid rgba(255,255,255,.18);
+      border-top-color:#fff;
+      border-radius:50%;
+      animation:spin 1s linear infinite;
+      margin-bottom:18px;
+    }
+
+    @keyframes spin{
+      to{ transform:rotate(360deg); }
     }
 
     .hero{
@@ -137,6 +175,11 @@
       font-size:16px;
       cursor:pointer;
       font-weight:bold;
+      transition:.2s ease;
+    }
+
+    .btn:hover{
+      transform:translateY(-2px);
     }
 
     .btn-primary{
@@ -300,7 +343,24 @@
     .question-text{
       font-size:28px;
       line-height:1.8;
-      margin:0 0 20px;
+      margin:0 0 16px;
+    }
+
+    .question-figure{
+      margin:18px 0 18px;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      background:#FCFAFF;
+      border:1px solid var(--border);
+      border-radius:20px;
+      padding:14px;
+      min-height:130px;
+    }
+
+    .question-figure svg{
+      max-width:100%;
+      height:auto;
     }
 
     .options{
@@ -383,6 +443,12 @@
       margin-bottom:6px;
     }
 
+    .score-badge{
+      font-size:32px;
+      color:var(--warning);
+      font-weight:bold;
+    }
+
     .result-wrap{
       display:none;
       max-width:900px;
@@ -439,6 +505,15 @@
       font-size:17px;
     }
 
+    .official-note{
+      margin-top:20px;
+      box-shadow:none;
+      border:1px solid var(--border);
+      border-radius:20px;
+      padding:20px;
+      background:#FCFAFF;
+    }
+
     @media (max-width: 900px){
       .features,
       .subjects,
@@ -467,6 +542,12 @@
   </style>
 </head>
 <body>
+
+  <div class="loading-screen" id="loadingScreen">
+    <div class="loader-ring"></div>
+    <h2>جاري تحميل المنصة...</h2>
+    <p>استعدي لرحلة تدريبية ملهمة 💜</p>
+  </div>
 
   <header class="hero">
     <div class="hero-inner">
@@ -504,7 +585,7 @@
         تصحيح مباشر
       </div>
       <div class="feature">
-        <strong id="homeQuestionCount">7</strong>
+        <strong id="homeQuestionCount">9</strong>
         عدد الأسئلة
       </div>
     </div>
@@ -520,19 +601,19 @@
       <div class="subject-card" onclick="startQuiz('science')">
         <div class="icon-box">🧪</div>
         <h3>العلوم</h3>
-        <p>تدريب على المفاهيم العلمية والتفسير والتطبيق والاستنتاج.</p>
+        <p>مفاهيم علمية ورسوم توضيحية وتفسير واستنتاج.</p>
       </div>
 
       <div class="subject-card" onclick="startQuiz('reading')">
         <div class="icon-box">📖</div>
         <h3>القراءة</h3>
-        <p>تدريب على فهم النصوص والاستنتاج والمفردات والأساليب.</p>
+        <p>فهم نصوص واستنتاج ومفردات وأساليب.</p>
       </div>
 
       <div class="subject-card" onclick="startQuiz('math')">
         <div class="icon-box">🔢</div>
         <h3>الرياضيات</h3>
-        <p>تدريب على أسئلة المهارات الرياضية والحل والاستدلال.</p>
+        <p>أسئلة مهارية مع أشكال ورسومات واضحة وملونة.</p>
       </div>
     </div>
   </section>
@@ -553,6 +634,9 @@
       </div>
 
       <h3 class="question-text" id="questionText"></h3>
+
+      <div class="question-figure" id="questionFigure"></div>
+
       <div class="options" id="optionsContainer"></div>
 
       <div class="feedback" id="feedbackBox"></div>
@@ -580,8 +664,8 @@
           <span id="sideScore">0</span>
         </div>
         <div class="side-item">
-          <strong>ملاحظة</strong>
-          <span>هذه النسخة قابلة للتوسعة بإضافة أسئلة نافس الفعلية من ملفاتك.</span>
+          <strong>النقاط</strong>
+          <span class="score-badge" id="pointsValue">0</span>
         </div>
       </div>
     </aside>
@@ -610,7 +694,7 @@
 
       <p id="resultMessage"></p>
 
-      <div class="result-card" style="margin-top:20px; box-shadow:none; border:1px solid var(--border);">
+      <div class="official-note">
         <p>
           رحلة تدريبية ملهمة، نحو أداءٍ متميز ومستقبلٍ واعد، انسجامًا مع مستهدفات رؤية السعودية 2030.
         </p>
@@ -637,27 +721,146 @@
     document.getElementById("motivationText").textContent =
       messages[Math.floor(Math.random() * messages.length)];
 
+    const svgShapes = {
+      triangleRight: `
+        <svg viewBox="0 0 260 160" aria-label="مثلث قائم الزاوية">
+          <rect x="0" y="0" width="260" height="160" rx="18" fill="#F8F4FF"/>
+          <polygon points="40,120 40,35 190,120" fill="#C4B5FD" stroke="#5B2D91" stroke-width="4"/>
+          <rect x="40" y="104" width="18" height="16" fill="#fff" stroke="#5B2D91" stroke-width="3"/>
+          <text x="115" y="142" font-size="18" fill="#231942" text-anchor="middle">قاعدة</text>
+          <text x="20" y="82" font-size="18" fill="#231942" transform="rotate(-90 20 82)">ارتفاع</text>
+        </svg>
+      `,
+      rectangleGrid: `
+        <svg viewBox="0 0 260 160" aria-label="مستطيل">
+          <rect x="0" y="0" width="260" height="160" rx="18" fill="#F8F4FF"/>
+          <rect x="45" y="40" width="150" height="80" fill="#DDD6FE" stroke="#5B2D91" stroke-width="4"/>
+          <text x="120" y="33" font-size="18" fill="#231942" text-anchor="middle">10 سم</text>
+          <text x="210" y="86" font-size="18" fill="#231942">5 سم</text>
+        </svg>
+      `,
+      barGraph: `
+        <svg viewBox="0 0 260 170" aria-label="تمثيل بياني">
+          <rect x="0" y="0" width="260" height="170" rx="18" fill="#F8F4FF"/>
+          <line x1="40" y1="135" x2="220" y2="135" stroke="#5B2D91" stroke-width="4"/>
+          <line x1="40" y1="135" x2="40" y2="30" stroke="#5B2D91" stroke-width="4"/>
+          <rect x="65" y="88" width="28" height="47" fill="#8B5CF6"/>
+          <rect x="110" y="65" width="28" height="70" fill="#A78BFA"/>
+          <rect x="155" y="40" width="28" height="95" fill="#C4B5FD"/>
+          <text x="79" y="152" font-size="14" text-anchor="middle" fill="#231942">0</text>
+          <text x="124" y="152" font-size="14" text-anchor="middle" fill="#231942">1</text>
+          <text x="169" y="152" font-size="14" text-anchor="middle" fill="#231942">2</text>
+        </svg>
+      `,
+      beaker: `
+        <svg viewBox="0 0 260 170" aria-label="كأس مخبري">
+          <rect x="0" y="0" width="260" height="170" rx="18" fill="#F8F4FF"/>
+          <path d="M95 30 L165 30 L150 55 L150 120 Q150 135 130 135 Q110 135 110 120 L110 55 Z"
+                fill="#E9D5FF" stroke="#5B2D91" stroke-width="4"/>
+          <path d="M112 92 Q130 82 148 92 L148 120 Q148 132 130 132 Q112 132 112 120 Z"
+                fill="#60A5FA"/>
+          <circle cx="124" cy="104" r="4" fill="#fff"/>
+          <circle cx="137" cy="112" r="5" fill="#fff"/>
+        </svg>
+      `,
+      cell: `
+        <svg viewBox="0 0 260 170" aria-label="خلية">
+          <rect x="0" y="0" width="260" height="170" rx="18" fill="#F8F4FF"/>
+          <ellipse cx="130" cy="85" rx="80" ry="52" fill="#C4B5FD" stroke="#5B2D91" stroke-width="4"/>
+          <circle cx="132" cy="85" r="23" fill="#8B5CF6"/>
+          <ellipse cx="92" cy="70" rx="12" ry="8" fill="#A78BFA"/>
+          <ellipse cx="167" cy="72" rx="13" ry="8" fill="#A78BFA"/>
+          <ellipse cx="154" cy="102" rx="14" ry="9" fill="#A78BFA"/>
+          <text x="130" y="152" text-anchor="middle" font-size="18" fill="#231942">خلية حية</text>
+        </svg>
+      `,
+      book: `
+        <svg viewBox="0 0 260 170" aria-label="كتاب">
+          <rect x="0" y="0" width="260" height="170" rx="18" fill="#F8F4FF"/>
+          <path d="M55 40 Q95 25 130 40 L130 130 Q95 115 55 130 Z" fill="#DDD6FE" stroke="#5B2D91" stroke-width="4"/>
+          <path d="M130 40 Q165 25 205 40 L205 130 Q165 115 130 130 Z" fill="#E9D5FF" stroke="#5B2D91" stroke-width="4"/>
+          <line x1="130" y1="40" x2="130" y2="130" stroke="#5B2D91" stroke-width="4"/>
+        </svg>
+      `
+    };
+
     const questionBanks = {
       math: {
         name: "الرياضيات",
         questions: [
-          { q: "كم ناتج 3 + 5 ؟", options: ["6","7","8","9"], answer: "8", explanation: "لأن 3 + 5 = 8." },
-          { q: "كم ناتج 9 × 2 ؟", options: ["18","16","20","14"], answer: "18", explanation: "عند ضرب 9 في 2 يكون الناتج 18." },
-          { q: "كم ناتج 10 - 4 ؟", options: ["5","6","7","8"], answer: "6", explanation: "طرح 4 من 10 يعطينا 6." }
+          {
+            q: "إذا كان 3س + 5 = 20، فما قيمة س ؟",
+            figure: "",
+            options: ["3", "5", "7", "10"],
+            answer: "5",
+            explanation: "نطرح 5 من 20 فيتبقى 15، ثم نقسم 15 على 3 فيكون س = 5."
+          },
+          {
+            q: "انظري إلى الشكل، ما نوع المثلث الموضح؟",
+            figure: "triangleRight",
+            options: ["حاد الزوايا", "قائم الزاوية", "منفرج الزاوية", "متساوي الأضلاع"],
+            answer: "قائم الزاوية",
+            explanation: "وجود مربع صغير عند الزاوية يدل على أن قياسها 90°، إذن هو مثلث قائم الزاوية."
+          },
+          {
+            q: "إذا كان طول المستطيل 10 سم وعرضه 5 سم، فما مساحته؟",
+            figure: "rectangleGrid",
+            options: ["15 سم²", "50 سم²", "20 سم²", "10 سم²"],
+            answer: "50 سم²",
+            explanation: "مساحة المستطيل = الطول × العرض = 10 × 5 = 50 سم²."
+          }
         ]
       },
       reading: {
         name: "القراءة",
         questions: [
-          { q: "أي خيار يُعد مهارة أساسية في فهم النص المقروء؟", options: ["الاستنتاج","النسخ فقط","الحفظ دون فهم","تجاهل العنوان"], answer: "الاستنتاج", explanation: "الاستنتاج يساعد على فهم المعاني الضمنية في النص." },
-          { q: "العنوان الجيد للنص يساعد القارئ على:", options: ["فهم الفكرة العامة","إهمال التفاصيل","إلغاء المعنى","عدم التركيز"], answer: "فهم الفكرة العامة", explanation: "العنوان يمهد لفكرة النص ويساعد على التوقع." }
+          {
+            q: "أي خيار يُعد مهارة أساسية في فهم النص المقروء؟",
+            figure: "book",
+            options: ["الاستنتاج", "النسخ فقط", "الحفظ دون فهم", "تجاهل العنوان"],
+            answer: "الاستنتاج",
+            explanation: "الاستنتاج يساعد القارئ على فهم المعاني الضمنية والربط بين الأفكار."
+          },
+          {
+            q: "العنوان الجيد للنص يساعد القارئ على:",
+            figure: "",
+            options: ["فهم الفكرة العامة", "إهمال التفاصيل", "إلغاء المعنى", "عدم التركيز"],
+            answer: "فهم الفكرة العامة",
+            explanation: "العنوان يمهد لفكرة النص ويساعد على توقع المحتوى."
+          },
+          {
+            q: "إذا وردت كلمة واضحة في النص، فأقرب معنى لها هو:",
+            figure: "",
+            options: ["غامضة", "جلية", "صعبة", "بعيدة"],
+            answer: "جلية",
+            explanation: "كلمة واضحة تعني جلية أو ظاهرة المعنى."
+          }
         ]
       },
       science: {
         name: "العلوم",
         questions: [
-          { q: "ما العضية المسؤولة غالبًا عن إنتاج الطاقة في الخلية؟", options: ["الميتوكوندريا","الجدار الخلوي","الفجوة","الغشاء البلازمي"], answer: "الميتوكوندريا", explanation: "الميتوكوندريا مسؤولة عن إنتاج الطاقة في الخلية." },
-          { q: "أي التغيرات التالية يُعد تغيرًا فيزيائيًا؟", options: ["انصهار الثلج","احتراق الورق","صدأ الحديد","تعفن الطعام"], answer: "انصهار الثلج", explanation: "الانصهار تغير في الحالة فقط دون تكوين مادة جديدة." }
+          {
+            q: "ما العضية المسؤولة غالبًا عن إنتاج الطاقة في الخلية؟",
+            figure: "cell",
+            options: ["الميتوكوندريا", "الجدار الخلوي", "الفجوة", "الغشاء البلازمي"],
+            answer: "الميتوكوندريا",
+            explanation: "الميتوكوندريا مسؤولة عن إنتاج الطاقة داخل الخلية."
+          },
+          {
+            q: "أي أداة مخبرية يظهرها الشكل؟",
+            figure: "beaker",
+            options: ["ميزان", "كأس مخبري", "مجهر", "ترمومتر"],
+            answer: "كأس مخبري",
+            explanation: "الشكل يوضح كأسًا مخبريًا يستخدم في خلط أو تسخين بعض المحاليل."
+          },
+          {
+            q: "أي التغيرات التالية يُعد تغيرًا فيزيائيًا؟",
+            figure: "",
+            options: ["انصهار الثلج", "احتراق الورق", "صدأ الحديد", "تعفن الطعام"],
+            answer: "انصهار الثلج",
+            explanation: "الانصهار تغير في الحالة فقط دون تكوّن مادة جديدة."
+          }
         ]
       }
     };
@@ -667,6 +870,7 @@
     let currentIndex = 0;
     let score = 0;
     let answered = false;
+    let points = 0;
 
     const homeSection = document.getElementById("homeSection");
     const quizSection = document.getElementById("quizSection");
@@ -674,6 +878,7 @@
     const subjectName = document.getElementById("subjectName");
     const questionNumber = document.getElementById("questionNumber");
     const questionText = document.getElementById("questionText");
+    const questionFigure = document.getElementById("questionFigure");
     const optionsContainer = document.getElementById("optionsContainer");
     const feedbackBox = document.getElementById("feedbackBox");
     const nextBtn = document.getElementById("nextBtn");
@@ -682,6 +887,7 @@
     const sideSubject = document.getElementById("sideSubject");
     const sideCount = document.getElementById("sideCount");
     const sideScore = document.getElementById("sideScore");
+    const pointsValue = document.getElementById("pointsValue");
     const homeQuestionCount = document.getElementById("homeQuestionCount");
 
     const totalAllQuestions =
@@ -690,6 +896,12 @@
       questionBanks.science.questions.length;
 
     homeQuestionCount.textContent = totalAllQuestions;
+
+    window.addEventListener("load", () => {
+      setTimeout(() => {
+        document.getElementById("loadingScreen").classList.add("hide");
+      }, 1200);
+    });
 
     function scrollToSubjects(){
       document.getElementById("subjectsAnchor").scrollIntoView({behavior:"smooth"});
@@ -700,6 +912,7 @@
       currentQuestions = questionBanks[subjectKey].questions;
       currentIndex = 0;
       score = 0;
+      points = 0;
       answered = false;
 
       homeSection.style.display = "none";
@@ -710,6 +923,7 @@
       sideSubject.textContent = questionBanks[subjectKey].name;
       sideCount.textContent = currentQuestions.length;
       sideScore.textContent = score;
+      pointsValue.textContent = points;
 
       loadQuestion();
       window.scrollTo({top:0, behavior:"smooth"});
@@ -729,6 +943,12 @@
       const percent = Math.round((currentIndex / currentQuestions.length) * 100);
       progressFill.style.width = `${percent}%`;
       progressPercent.textContent = `${percent}%`;
+
+      if(q.figure && svgShapes[q.figure]){
+        questionFigure.innerHTML = svgShapes[q.figure];
+      } else {
+        questionFigure.innerHTML = "<div style='color:var(--muted); font-size:15px;'>لا يوجد رسم في هذا السؤال</div>";
+      }
 
       q.options.forEach(option => {
         const btn = document.createElement("button");
@@ -756,11 +976,13 @@
         button.classList.add("wrong");
       } else {
         score++;
+        points += 10;
       }
 
       feedbackBox.className = "feedback show";
       feedbackBox.textContent = `الإجابة الصحيحة: ${correct} — ${explanation}`;
       sideScore.textContent = score;
+      pointsValue.textContent = points;
     }
 
     function nextQuestion(){
@@ -788,11 +1010,11 @@
 
       let msg = "";
       if(percent >= 85){
-        msg = "ممتاز جدًا، مستوى متميز. استمري على هذا الأداء الرائع.";
+        msg = `ممتاز جدًا 🌟 حصلتِ على ${points} نقطة. مستوى متميز وأداء رائع.`;
       } else if(percent >= 60){
-        msg = "أداء جيد، ومع مزيد من التدريب ستصلين لمستوى أعلى.";
+        msg = `أداء جيد جدًا ✨ حصلتِ على ${points} نقطة. ومع مزيد من التدريب ستصلين لمستوى أعلى.`;
       } else {
-        msg = "بداية جيدة، أعيدي التدريب وراجعي التغذية الراجعة بعد كل سؤال.";
+        msg = `بداية جيدة 💜 حصلتِ على ${points} نقطة. أعيدي التدريب وراجعي التغذية الراجعة بعد كل سؤال.`;
       }
 
       document.getElementById("resultMessage").textContent = msg;
