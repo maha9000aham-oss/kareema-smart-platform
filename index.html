@@ -1,766 +1,190 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>منصة كريمة بنت همام الذكية | منافسون للقمة</title>
-  <meta name="description" content="منصة تدريبية تفاعلية على نمط نافس مع تغذية راجعة فورية وطريقة الحل." />
-  <style>
-    :root{
-      --primary:#0f766e;
-      --primary-dark:#115e59;
-      --secondary:#f59e0b;
-      --bg:#f4f7fb;
-      --surface:#ffffff;
-      --text:#163046;
-      --muted:#5f7285;
-      --success:#0f9d58;
-      --error:#d93025;
-      --border:#d8e1ea;
-      --shadow:0 10px 30px rgba(15, 23, 42, 0.08);
-      --radius:20px;
-    }
-
-    *{
-      box-sizing:border-box;
-    }
-
-    html{
-      scroll-behavior:smooth;
-    }
-
-    body{
-      margin:0;
-      font-family: Arial, "Tahoma", sans-serif;
-      background:linear-gradient(180deg,#eef6f5 0%, #f8fbff 40%, #f4f7fb 100%);
-      color:var(--text);
-      line-height:1.8;
-    }
-
-    .container{
-      width:min(1100px, 92%);
-      margin:auto;
-    }
-
-    .hero{
-      padding:40px 0 24px;
-    }
-
-    .hero-card{
-      background:linear-gradient(135deg, rgba(15,118,110,0.98), rgba(21,94,89,0.95));
-      color:#fff;
-      border-radius:28px;
-      padding:34px 24px;
-      box-shadow:var(--shadow);
-      position:relative;
-      overflow:hidden;
-    }
-
-    .hero-card::before,
-    .hero-card::after{
-      content:"";
-      position:absolute;
-      border-radius:50%;
-      opacity:.12;
-      background:#fff;
-    }
-
-    .hero-card::before{
-      width:220px;
-      height:220px;
-      top:-70px;
-      left:-60px;
-    }
-
-    .hero-card::after{
-      width:180px;
-      height:180px;
-      bottom:-70px;
-      right:-40px;
-    }
-
-    .badge{
-      display:inline-block;
-      background:rgba(255,255,255,.14);
-      border:1px solid rgba(255,255,255,.18);
-      color:#fff;
-      padding:8px 14px;
-      border-radius:999px;
-      font-size:14px;
-      margin-bottom:16px;
-    }
-
-    h1{
-      margin:0 0 8px;
-      font-size:clamp(28px, 5vw, 44px);
-      line-height:1.3;
-    }
-
-    .subtitle{
-      margin:0;
-      font-size:clamp(18px, 3vw, 24px);
-      font-weight:bold;
-      color:#fef3c7;
-    }
-
-    .hero-text{
-      margin-top:16px;
-      max-width:760px;
-      font-size:16px;
-      color:#ecfeff;
-    }
-
-    .hero-actions{
-      display:flex;
-      flex-wrap:wrap;
-      gap:12px;
-      margin-top:24px;
-    }
-
-    .btn{
-      border:none;
-      border-radius:14px;
-      padding:14px 18px;
-      font-size:16px;
-      font-weight:bold;
-      cursor:pointer;
-      transition:.25s ease;
-    }
-
-    .btn-primary{
-      background:#fff;
-      color:var(--primary-dark);
-    }
-
-    .btn-primary:hover{
-      transform:translateY(-2px);
-    }
-
-    .btn-secondary{
-      background:rgba(255,255,255,.14);
-      color:#fff;
-      border:1px solid rgba(255,255,255,.22);
-    }
-
-    .btn-secondary:hover{
-      background:rgba(255,255,255,.2);
-    }
-
-    .stats{
-      display:grid;
-      grid-template-columns:repeat(4,1fr);
-      gap:14px;
-      margin:22px 0 0;
-    }
-
-    .stat{
-      background:rgba(255,255,255,.12);
-      border:1px solid rgba(255,255,255,.12);
-      border-radius:18px;
-      padding:16px;
-      text-align:center;
-      backdrop-filter:blur(4px);
-    }
-
-    .stat strong{
-      display:block;
-      font-size:22px;
-      margin-bottom:6px;
-    }
-
-    .main-grid{
-      display:grid;
-      grid-template-columns: 1.1fr .9fr;
-      gap:22px;
-      margin:26px 0 40px;
-      align-items:start;
-    }
-
-    .card{
-      background:var(--surface);
-      border:1px solid var(--border);
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
-      padding:22px;
-    }
-
-    .section-title{
-      margin:0 0 10px;
-      font-size:24px;
-    }
-
-    .section-desc{
-      margin:0 0 18px;
-      color:var(--muted);
-      font-size:15px;
-    }
-
-    .progress-wrap{
-      display:grid;
-      gap:12px;
-      margin-bottom:18px;
-    }
-
-    .mini-stats{
-      display:grid;
-      grid-template-columns:repeat(3,1fr);
-      gap:12px;
-    }
-
-    .mini-box{
-      background:#f8fbfc;
-      border:1px solid #e5edf4;
-      border-radius:16px;
-      padding:14px;
-      text-align:center;
-    }
-
-    .mini-box strong{
-      display:block;
-      font-size:24px;
-      color:var(--primary-dark);
-    }
-
-    .bar{
-      height:14px;
-      background:#e8eef5;
-      border-radius:999px;
-      overflow:hidden;
-    }
-
-    .bar-fill{
-      width:0%;
-      height:100%;
-      background:linear-gradient(90deg,var(--primary), #14b8a6);
-      transition:width .35s ease;
-    }
-
-    .question-head{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:12px;
-      margin-bottom:10px;
-    }
-
-    .question-number{
-      background:#ecfdf5;
-      color:var(--primary-dark);
-      border:1px solid #cdeee7;
-      border-radius:999px;
-      padding:8px 14px;
-      font-size:14px;
-      font-weight:bold;
-      white-space:nowrap;
-    }
-
-    .question-text{
-      font-size:20px;
-      font-weight:bold;
-      margin:12px 0 18px;
-      line-height:1.8;
-    }
-
-    .options{
-      display:grid;
-      gap:12px;
-    }
-
-    .option{
-      width:100%;
-      text-align:right;
-      background:#fff;
-      border:2px solid #dde7f0;
-      border-radius:16px;
-      padding:14px 16px;
-      font-size:16px;
-      cursor:pointer;
-      transition:.2s ease;
-      color:var(--text);
-    }
-
-    .option:hover{
-      border-color:#9ad9d2;
-      background:#f7fffe;
-    }
-
-    .option.correct{
-      border-color:#b7ebc6;
-      background:#edf9f1;
-      color:var(--success);
-      font-weight:bold;
-    }
-
-    .option.wrong{
-      border-color:#f2b8b5;
-      background:#fff1f0;
-      color:var(--error);
-      font-weight:bold;
-    }
-
-    .feedback{
-      margin-top:18px;
-      padding:16px;
-      border-radius:16px;
-      display:none;
-      border:1px solid transparent;
-    }
-
-    .feedback.show{
-      display:block;
-    }
-
-    .feedback.success{
-      background:#edf9f1;
-      border-color:#cfead8;
-    }
-
-    .feedback.error{
-      background:#fff1f0;
-      border-color:#f4c7c3;
-    }
-
-    .feedback-title{
-      margin:0 0 8px;
-      font-size:18px;
-      font-weight:bold;
-    }
-
-    .feedback p{
-      margin:6px 0;
-    }
-
-    .controls{
-      display:flex;
-      flex-wrap:wrap;
-      gap:12px;
-      margin-top:18px;
-    }
-
-    .ctrl-btn{
-      flex:1;
-      min-width:140px;
-      border:none;
-      border-radius:14px;
-      padding:13px 16px;
-      font-size:15px;
-      font-weight:bold;
-      cursor:pointer;
-      transition:.2s ease;
-    }
-
-    .next-btn{
-      background:var(--primary);
-      color:#fff;
-    }
-
-    .next-btn:hover{
-      background:var(--primary-dark);
-    }
-
-    .reset-btn{
-      background:#eef3f8;
-      color:var(--text);
-    }
-
-    .reset-btn:hover{
-      background:#e5edf5;
-    }
-
-    .info-list{
-      display:grid;
-      gap:12px;
-    }
-
-    .info-item{
-      background:#f8fbfc;
-      border:1px solid #e5edf4;
-      border-radius:16px;
-      padding:16px;
-    }
-
-    .info-item h3{
-      margin:0 0 6px;
-      font-size:17px;
-      color:var(--primary-dark);
-    }
-
-    .info-item p{
-      margin:0;
-      color:var(--muted);
-      font-size:15px;
-    }
-
-    .footer-note{
-      text-align:center;
-      color:var(--muted);
-      font-size:14px;
-      padding:0 0 30px;
-    }
-
-    .result-screen{
-      display:none;
-      text-align:center;
-    }
-
-    .result-screen.show{
-      display:block;
-    }
-
-    .result-badge{
-      width:88px;
-      height:88px;
-      display:grid;
-      place-items:center;
-      margin:0 auto 18px;
-      border-radius:50%;
-      background:linear-gradient(135deg,#fef3c7,#fde68a);
-      font-size:34px;
-    }
-
-    .result-screen h2{
-      margin:0 0 10px;
-      font-size:28px;
-    }
-
-    .result-screen p{
-      color:var(--muted);
-      margin:0 0 10px;
-    }
-
-    .recommendation{
-      margin-top:16px;
-      padding:16px;
-      border-radius:16px;
-      background:#f8fbfc;
-      border:1px solid #e4edf4;
-      text-align:right;
-    }
-
-    @media (max-width: 900px){
-      .stats,
-      .mini-stats,
-      .main-grid{
-        grid-template-columns:1fr;
-      }
-
-      .question-head{
-        flex-direction:column;
-        align-items:flex-start;
-      }
-
-      .hero{
-        padding-top:24px;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>منصة كريمة بنت همام الذكية | نافس</title>
+
+<style>
+body{
+font-family: "Tajawal", sans-serif;
+background:#f4f7fb;
+margin:0;
+}
+
+.container{
+max-width:900px;
+margin:auto;
+padding:20px;
+}
+
+.header{
+background:#0f766e;
+color:white;
+padding:30px;
+border-radius:20px;
+text-align:center;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:15px;
+margin-top:20px;
+}
+
+.card{
+background:white;
+padding:20px;
+border-radius:15px;
+text-align:center;
+cursor:pointer;
+box-shadow:0 5px 15px rgba(0,0,0,0.1);
+}
+
+.card:hover{
+transform:scale(1.05);
+}
+
+.hidden{
+display:none;
+}
+
+.question-box{
+background:white;
+padding:20px;
+border-radius:15px;
+margin-top:20px;
+}
+
+.option{
+display:block;
+margin:10px 0;
+padding:10px;
+border:1px solid #ccc;
+border-radius:10px;
+cursor:pointer;
+}
+
+.option:hover{
+background:#e6fffa;
+}
+
+.btn{
+background:#0f766e;
+color:white;
+padding:10px 20px;
+border:none;
+border-radius:10px;
+margin-top:15px;
+cursor:pointer;
+}
+</style>
 </head>
+
 <body>
 
-  <header class="hero">
-    <div class="container">
-      <div class="hero-card">
-        <span class="badge">منصة تدريبية تفاعلية</span>
-        <h1>منصة كريمة بنت همام الذكية</h1>
-        <p class="subtitle">منافسون للقمة</p>
-        <p class="hero-text">
-          منصة تدريب موجهة لدعم الطالبات في الاستعداد لاختبارات نافس من خلال أسئلة تدريبية
-          تحاكي النمط العام للاختبارات، مع إظهار الإجابة الصحيحة وطريقة الحل وتغذية راجعة فورية
-          تعزز الفهم وتدعم التحسن المستمر.
-        </p>
+<div class="container">
 
-        <div class="hero-actions">
-          <button class="btn btn-primary" onclick="scrollToQuiz()">ابدئي التدريب الآن</button>
-          <button class="btn btn-secondary" onclick="resetQuiz()">إعادة المحاولة</button>
-        </div>
+<div class="header">
+<h1>منصة كريمة بنت همام الذكية</h1>
+<p>منافسون للقمة</p>
+</div>
 
-        <div class="stats">
-          <div class="stat">
-            <strong id="heroTotal">3</strong>
-            عدد الأسئلة
-          </div>
-          <div class="stat">
-            <strong>فوري</strong>
-            تصحيح مباشر
-          </div>
-          <div class="stat">
-            <strong>مستمر</strong>
-            تغذية راجعة
-          </div>
-          <div class="stat">
-            <strong>عربي</strong>
-            واجهة سهلة
-          </div>
-        </div>
-      </div>
-    </div>
-  </header>
+<!-- الصفحة الرئيسية -->
+<div id="home">
 
-  <main class="container">
-    <section class="main-grid">
-      <div class="card" id="quizSection">
-        <h2 class="section-title">التدريب التفاعلي</h2>
-        <p class="section-desc">
-          اختاري الإجابة الأنسب، وستظهر لكِ النتيجة فورًا مع طريقة الحل والتفسير.
-        </p>
+<div class="grid">
 
-        <div class="progress-wrap">
-          <div class="mini-stats">
-            <div class="mini-box">
-              <strong id="scoreValue">0</strong>
-              الصحيح
-            </div>
-            <div class="mini-box">
-              <strong id="answeredValue">0</strong>
-              المُجاب
-            </div>
-            <div class="mini-box">
-              <strong id="percentValue">0%</strong>
-              الإتقان
-            </div>
-          </div>
+<div class="card" onclick="startSection('math')">
+📊<br>الرياضيات
+</div>
 
-          <div class="bar" aria-label="مستوى التقدم">
-            <div class="bar-fill" id="progressBar"></div>
-          </div>
-        </div>
+<div class="card">
+📖<br>القراءة
+</div>
 
-        <div id="quizCard">
-          <div class="question-head">
-            <div class="question-number" id="questionNumber">السؤال 1 من 3</div>
-          </div>
+<div class="card">
+🔬<br>العلوم
+</div>
 
-          <div class="question-text" id="questionText"></div>
+</div>
+</div>
 
-          <div class="options" id="optionsContainer"></div>
+<!-- صفحة الأسئلة -->
+<div id="quiz" class="hidden">
 
-          <div class="feedback" id="feedbackBox">
-            <div class="feedback-title" id="feedbackTitle"></div>
-            <p id="correctAnswerText"></p>
-            <p id="explanationText"></p>
-            <p id="skillText"></p>
-          </div>
+<div class="question-box">
+<h3 id="question"></h3>
 
-          <div class="controls">
-            <button class="ctrl-btn next-btn" id="nextBtn" onclick="nextQuestion()" disabled>السؤال التالي</button>
-            <button class="ctrl-btn reset-btn" onclick="resetQuiz()">إعادة المحاولة</button>
-          </div>
-        </div>
+<div id="options"></div>
 
-        <div class="result-screen" id="resultScreen">
-          <div class="result-badge">🏆</div>
-          <h2>أحسنتِ يا منافسة القمة</h2>
-          <p id="finalScoreText"></p>
-          <p id="finalPercentText"></p>
+<button class="btn" onclick="nextQuestion()">التالي</button>
+</div>
 
-          <div class="recommendation" id="recommendationBox"></div>
+</div>
 
-          <div class="controls" style="justify-content:center; margin-top:18px;">
-            <button class="ctrl-btn next-btn" onclick="resetQuiz()">إعادة التدريب من البداية</button>
-          </div>
-        </div>
-      </div>
+</div>
 
-      <aside class="card">
-        <h2 class="section-title">مزايا المنصة</h2>
-        <p class="section-desc">
-          صُممت هذه النسخة لتكون خفيفة، واضحة، وسهلة النشر أونلاين بدون تخزين بيانات.
-        </p>
+<script>
 
-        <div class="info-list">
-          <div class="info-item">
-            <h3>تغذية راجعة مستدامة</h3>
-            <p>تظهر الإجابة الصحيحة مباشرة مع تفسير واضح يساعد الطالبة على تثبيت التعلم.</p>
-          </div>
+let questions = [
+{
+q:"كم ناتج 5 + 3 ؟",
+options:["6","7","8","9"],
+answer:2
+},
+{
+q:"كم ناتج 9 × 2 ؟",
+options:["18","16","20","14"],
+answer:0
+},
+{
+q:"كم ناتج 10 - 4 ؟",
+options:["5","6","7","8"],
+answer:1
+}
+];
 
-          <div class="info-item">
-            <h3>واجهة عربية مريحة</h3>
-            <p>تصميم عربي كامل من اليمين إلى اليسار يناسب الطالبات في الاستخدام على الجوال والكمبيوتر.</p>
-          </div>
+let current = 0;
 
-          <div class="info-item">
-            <h3>مناسبة للنشر السريع</h3>
-            <p>لا تحتاج تسجيل دخول أو قاعدة بيانات، لذا فهي مناسبة لرفعها على GitHub Pages بسهولة.</p>
-          </div>
+function startSection(section){
+document.getElementById("home").classList.add("hidden");
+document.getElementById("quiz").classList.remove("hidden");
+showQuestion();
+}
 
-          <div class="info-item">
-            <h3>قابلة للتطوير</h3>
-            <p>يمكن لاحقًا إضافة أسئلة أكثر، تقسيم المهارات، أو تخصيصها لمادة محددة دون إعادة بناء المنصة من الصفر.</p>
-          </div>
-        </div>
-      </aside>
-    </section>
+function showQuestion(){
+let q = questions[current];
+document.getElementById("question").innerText = q.q;
 
-    <p class="footer-note">
-      منصة تعليمية أولية قابلة للتوسعة، مخصصة للتدريب على نمط نافس مع شرح وتغذية راجعة فورية.
-    </p>
-  </main>
+let optionsHTML = "";
+q.options.forEach((opt,i)=>{
+optionsHTML += `<div class="option" onclick="selectAnswer(${i})">${opt}</div>`;
+});
 
-  <script>
-    const questions = [
-      {
-        question: "أي أجزاء الخلية مسؤول غالبًا عن إنتاج الطاقة اللازمة لأنشطة الخلية؟",
-        options: ["الميتوكوندريا", "الجدار الخلوي", "الفجوة العصارية", "الغشاء البلازمي"],
-        correctIndex: 0,
-        explanation: "الميتوكوندريا تُعد موقع إنتاج الطاقة في الخلية من خلال عمليات التنفس الخلوي، لذلك فهي الإجابة الصحيحة.",
-        skill: "المهارة: تفسير وظائف تراكيب الخلية."
-      },
-      {
-        question: "عندما تزداد كمية الضوء التي تصل إلى النبات، فما التغير المتوقع غالبًا في معدل البناء الضوئي عند توفر بقية العوامل؟",
-        options: ["ينخفض مباشرة", "يزداد إلى حد معين", "يتوقف تمامًا", "لا يتأثر أبدًا"],
-        correctIndex: 1,
-        explanation: "يزداد معدل البناء الضوئي بزيادة شدة الضوء إلى حد معين، ثم قد يستقر إذا أصبح عامل آخر هو العامل المحدد.",
-        skill: "المهارة: تفسير العوامل المؤثرة في البناء الضوئي."
-      },
-      {
-        question: "أي مما يلي يُعد مثالًا على تكيف يساعد الكائن الحي على البقاء في بيئته؟",
-        options: ["لون الفرو الذي يموّه الحيوان", "عدم حاجة النبات للماء مطلقًا", "عيش جميع الكائنات في البيئة نفسها", "عدم تأثر الكائن بأي تغير بيئي"],
-        correctIndex: 0,
-        explanation: "التمويه من صور التكيف التي تساعد الكائن الحي على الحماية والنجاة وزيادة فرص البقاء في البيئة.",
-        skill: "المهارة: الاستدلال على صور التكيف في الكائنات الحية."
-      }
-    ];
+document.getElementById("options").innerHTML = optionsHTML;
+}
 
-    let currentQuestion = 0;
-    let score = 0;
-    let answeredCount = 0;
-    let answeredCurrent = false;
+function selectAnswer(i){
+if(i === questions[current].answer){
+alert("إجابة صحيحة ✅");
+}else{
+alert("إجابة خاطئة ❌");
+}
+}
 
-    const questionText = document.getElementById("questionText");
-    const optionsContainer = document.getElementById("optionsContainer");
-    const feedbackBox = document.getElementById("feedbackBox");
-    const feedbackTitle = document.getElementById("feedbackTitle");
-    const correctAnswerText = document.getElementById("correctAnswerText");
-    const explanationText = document.getElementById("explanationText");
-    const skillText = document.getElementById("skillText");
-    const questionNumber = document.getElementById("questionNumber");
-    const nextBtn = document.getElementById("nextBtn");
-    const scoreValue = document.getElementById("scoreValue");
-    const answeredValue = document.getElementById("answeredValue");
-    const percentValue = document.getElementById("percentValue");
-    const progressBar = document.getElementById("progressBar");
-    const resultScreen = document.getElementById("resultScreen");
-    const quizCard = document.getElementById("quizCard");
-    const finalScoreText = document.getElementById("finalScoreText");
-    const finalPercentText = document.getElementById("finalPercentText");
-    const recommendationBox = document.getElementById("recommendationBox");
-    const heroTotal = document.getElementById("heroTotal");
+function nextQuestion(){
+current++;
+if(current >= questions.length){
+alert("انتهى التدريب 🎉");
+location.reload();
+}else{
+showQuestion();
+}
+}
 
-    heroTotal.textContent = questions.length;
+</script>
 
-    function scrollToQuiz() {
-      document.getElementById("quizSection").scrollIntoView({ behavior: "smooth" });
-    }
-
-    function loadQuestion() {
-      const q = questions[currentQuestion];
-      questionText.textContent = q.question;
-      questionNumber.textContent = `السؤال ${currentQuestion + 1} من ${questions.length}`;
-      optionsContainer.innerHTML = "";
-      feedbackBox.className = "feedback";
-      feedbackBox.style.display = "none";
-      nextBtn.disabled = true;
-      answeredCurrent = false;
-
-      q.options.forEach((option, index) => {
-        const button = document.createElement("button");
-        button.className = "option";
-        button.textContent = option;
-        button.onclick = () => selectAnswer(index, button);
-        optionsContainer.appendChild(button);
-      });
-
-      updateStats();
-    }
-
-    function selectAnswer(selectedIndex, selectedButton) {
-      if (answeredCurrent) return;
-
-      answeredCurrent = true;
-      answeredCount++;
-
-      const q = questions[currentQuestion];
-      const optionButtons = document.querySelectorAll(".option");
-
-      optionButtons.forEach((btn, index) => {
-        btn.disabled = true;
-        if (index === q.correctIndex) {
-          btn.classList.add("correct");
-        }
-      });
-
-      if (selectedIndex === q.correctIndex) {
-        score++;
-        feedbackBox.className = "feedback show success";
-        feedbackTitle.textContent = "✅ إجابة صحيحة";
-      } else {
-        selectedButton.classList.add("wrong");
-        feedbackBox.className = "feedback show error";
-        feedbackTitle.textContent = "❌ إجابة غير صحيحة";
-      }
-
-      correctAnswerText.textContent = `الإجابة الصحيحة: ${q.options[q.correctIndex]}`;
-      explanationText.textContent = `طريقة الحل: ${q.explanation}`;
-      skillText.textContent = q.skill;
-
-      feedbackBox.style.display = "block";
-      nextBtn.disabled = false;
-
-      updateStats();
-    }
-
-    function updateStats() {
-      const mastery = answeredCount === 0 ? 0 : Math.round((score / answeredCount) * 100);
-      const progress = Math.round((answeredCount / questions.length) * 100);
-
-      scoreValue.textContent = score;
-      answeredValue.textContent = answeredCount;
-      percentValue.textContent = `${mastery}%`;
-      progressBar.style.width = `${progress}%`;
-    }
-
-    function nextQuestion() {
-      currentQuestion++;
-      if (currentQuestion < questions.length) {
-        loadQuestion();
-      } else {
-        showResults();
-      }
-    }
-
-    function showResults() {
-      quizCard.style.display = "none";
-      resultScreen.classList.add("show");
-
-      const finalPercent = Math.round((score / questions.length) * 100);
-      finalScoreText.textContent = `حصلتِ على ${score} من ${questions.length}`;
-      finalPercentText.textContent = `نسبة الإتقان: ${finalPercent}%`;
-
-      let recommendation = "";
-      if (finalPercent >= 85) {
-        recommendation = "ممتاز جدًا 🌟 مستوى متميز. استمري على هذا الأداء مع التوسع في أسئلة أكثر تنوعًا لزيادة الثبات والإتقان.";
-      } else if (finalPercent >= 60) {
-        recommendation = "أداء جيد جدًا ✨ لديك أساس قوي، ويُنصح بإعادة التدريب والتركيز على تفسير السؤال واستبعاد البدائل غير الصحيحة.";
-      } else {
-        recommendation = "بداية جيدة 🌷 يفضّل إعادة التدريب بهدوء مع قراءة التغذية الراجعة بعد كل سؤال؛ فذلك يساعد على تحسين الفهم ورفع المستوى تدريجيًا.";
-      }
-
-      recommendationBox.textContent = recommendation;
-      updateStats();
-    }
-
-    function resetQuiz() {
-      currentQuestion = 0;
-      score = 0;
-      answeredCount = 0;
-      answeredCurrent = false;
-      quizCard.style.display = "block";
-      resultScreen.classList.remove("show");
-      loadQuestion();
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-
-    loadQuestion();
-  </script>
 </body>
 </html>
