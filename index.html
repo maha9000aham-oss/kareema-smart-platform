@@ -3,81 +3,57 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>منصة كريمة بنت همام الذكية | نافس</title>
+<title>منصة كريمة بنت همام الذكية</title>
 
 <style>
-body{
-font-family: "Tajawal", sans-serif;
-background:#f4f7fb;
-margin:0;
+body {
+    font-family: sans-serif;
+    background: #f4f7fb;
+    margin: 0;
 }
 
-.container{
-max-width:900px;
-margin:auto;
-padding:20px;
+.container {
+    max-width: 900px;
+    margin: auto;
+    padding: 20px;
 }
 
-.header{
-background:#0f766e;
-color:white;
-padding:30px;
-border-radius:20px;
-text-align:center;
+.header {
+    background: #1f7a6d;
+    color: white;
+    padding: 40px;
+    border-radius: 20px;
+    text-align: center;
 }
 
-.grid{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:15px;
-margin-top:20px;
+button {
+    padding: 12px 20px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
 }
 
-.card{
-background:white;
-padding:20px;
-border-radius:15px;
-text-align:center;
-cursor:pointer;
-box-shadow:0 5px 15px rgba(0,0,0,0.1);
+.start-btn {
+    background: white;
+    color: #1f7a6d;
+    margin-top: 20px;
 }
 
-.card:hover{
-transform:scale(1.05);
+.card {
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    margin-top: 20px;
 }
 
-.hidden{
-display:none;
-}
-
-.question-box{
-background:white;
-padding:20px;
-border-radius:15px;
-margin-top:20px;
-}
-
-.option{
-display:block;
-margin:10px 0;
-padding:10px;
-border:1px solid #ccc;
-border-radius:10px;
-cursor:pointer;
-}
-
-.option:hover{
-background:#e6fffa;
-}
-
-.btn{
-background:#0f766e;
-color:white;
-padding:10px 20px;
-border:none;
-border-radius:10px;
-margin-top:15px;
-cursor:pointer;
+.option {
+    display: block;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    margin: 10px 0;
+    cursor: pointer;
 }
 </style>
 </head>
@@ -86,42 +62,28 @@ cursor:pointer;
 
 <div class="container">
 
-<div class="header">
+<div class="header" id="home">
 <h1>منصة كريمة بنت همام الذكية</h1>
 <p>منافسون للقمة</p>
+<button class="start-btn" onclick="chooseSection()">ابدئي التدريب الآن</button>
 </div>
 
-<!-- الصفحة الرئيسية -->
-<div id="home">
-
-<div class="grid">
-
-<div class="card" onclick="startSection('math')">
-📊<br>الرياضيات
+<div id="section" style="display:none" class="card">
+<h3>اختاري المجال</h3>
+<button onclick="startQuiz('math')">رياضيات</button>
+<button onclick="startQuiz('reading')">قراءة</button>
+<button onclick="startQuiz('science')">علوم</button>
 </div>
 
-<div class="card">
-📖<br>القراءة
-</div>
-
-<div class="card">
-🔬<br>العلوم
-</div>
-
-</div>
-</div>
-
-<!-- صفحة الأسئلة -->
-<div id="quiz" class="hidden">
-
-<div class="question-box">
+<div id="quiz" style="display:none" class="card">
 <h3 id="question"></h3>
-
 <div id="options"></div>
-
-<button class="btn" onclick="nextQuestion()">التالي</button>
+<button onclick="nextQuestion()">التالي</button>
 </div>
 
+<div id="result" style="display:none" class="card">
+<h2 id="score"></h2>
+<button onclick="restart()">إعادة المحاولة</button>
 </div>
 
 </div>
@@ -130,27 +92,28 @@ cursor:pointer;
 
 let questions = [
 {
-q:"كم ناتج 5 + 3 ؟",
-options:["6","7","8","9"],
-answer:2
+q: "كم ناتج 3 + 5 ؟",
+options: ["6","7","8","9"],
+answer: "8"
 },
 {
-q:"كم ناتج 9 × 2 ؟",
-options:["18","16","20","14"],
-answer:0
-},
-{
-q:"كم ناتج 10 - 4 ؟",
-options:["5","6","7","8"],
-answer:1
+q: "ما هو الكوكب الأقرب للشمس؟",
+options: ["الأرض","عطارد","المريخ","المشتري"],
+answer: "عطارد"
 }
 ];
 
 let current = 0;
+let score = 0;
 
-function startSection(section){
-document.getElementById("home").classList.add("hidden");
-document.getElementById("quiz").classList.remove("hidden");
+function chooseSection(){
+document.getElementById("home").style.display="none";
+document.getElementById("section").style.display="block";
+}
+
+function startQuiz(){
+document.getElementById("section").style.display="none";
+document.getElementById("quiz").style.display="block";
 showQuestion();
 }
 
@@ -159,29 +122,35 @@ let q = questions[current];
 document.getElementById("question").innerText = q.q;
 
 let optionsHTML = "";
-q.options.forEach((opt,i)=>{
-optionsHTML += `<div class="option" onclick="selectAnswer(${i})">${opt}</div>`;
+q.options.forEach(opt=>{
+optionsHTML += `<div class="option" onclick="selectAnswer('${opt}')">${opt}</div>`;
 });
-
 document.getElementById("options").innerHTML = optionsHTML;
 }
 
-function selectAnswer(i){
-if(i === questions[current].answer){
-alert("إجابة صحيحة ✅");
-}else{
-alert("إجابة خاطئة ❌");
+function selectAnswer(opt){
+if(opt === questions[current].answer){
+score++;
 }
 }
 
 function nextQuestion(){
 current++;
-if(current >= questions.length){
-alert("انتهى التدريب 🎉");
-location.reload();
-}else{
+if(current < questions.length){
 showQuestion();
+}else{
+showResult();
 }
+}
+
+function showResult(){
+document.getElementById("quiz").style.display="none";
+document.getElementById("result").style.display="block";
+document.getElementById("score").innerText = "درجتك: " + score;
+}
+
+function restart(){
+location.reload();
 }
 
 </script>
