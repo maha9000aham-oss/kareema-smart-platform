@@ -1,280 +1,930 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>منصة كريمة بنت همام الذكية | محاكاة نافس</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>منصة كريمة بنت همام الذكية | محاكاة نافس</title>
+  <style>
+    :root{
+      --primary:#6C4CF1;
+      --primary-dark:#1E2A78;
+      --secondary:#8E6BFF;
+      --bg:#F5F4FB;
+      --card:#FFFFFF;
+      --text:#1F2440;
+      --muted:#6B7280;
+      --border:#E7E3F6;
+      --soft:#F3EEFF;
+      --success:#16A34A;
+      --danger:#DC2626;
+      --warning:#F59E0B;
+      --shadow:0 16px 40px rgba(30,42,120,.10);
+      --radius-xl:30px;
+      --radius-lg:24px;
+      --radius-md:16px;
+    }
 
-<style>
-:root{
-  --primary:#6C4CF1;
-  --secondary:#8E6BFF;
-  --soft:#F3EEFF;
-  --bg:#F7F6FC;
-  --text:#1F2440;
-  --card:#ffffff;
-}
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family: Arial, sans-serif;
+      background:var(--bg);
+      color:var(--text);
+    }
 
-body{
-  margin:0;
-  font-family: "Segoe UI", sans-serif;
-  background:var(--bg);
-  color:var(--text);
-}
+    .hidden{display:none !important}
 
-/* شاشة تحميل */
-.loader{
-  position:fixed;
-  inset:0;
-  background:linear-gradient(135deg,#5b3ee6,#8e6bff);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  flex-direction:column;
-  color:white;
-  z-index:9999;
-}
+    #loader{
+      position:fixed;
+      inset:0;
+      background:linear-gradient(135deg,var(--primary-dark),var(--primary));
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      z-index:9999;
+      transition:opacity .6s ease, visibility .6s ease;
+    }
+    #loader.hide{
+      opacity:0;
+      visibility:hidden;
+      pointer-events:none;
+    }
+    .loader-box{
+      text-align:center;
+      color:#fff;
+      padding:24px;
+      max-width:520px;
+    }
+    .loader-logo{
+      font-size:34px;
+      font-weight:700;
+      margin-bottom:20px;
+      line-height:1.6;
+    }
+    .spinner{
+      width:76px;
+      height:76px;
+      margin:0 auto 18px;
+      border-radius:50%;
+      border:6px solid rgba(255,255,255,.18);
+      border-top-color:#fff;
+      animation:spin 1s linear infinite;
+    }
+    .loader-text{
+      font-size:18px;
+      margin:8px 0;
+    }
+    .loader-sub{
+      font-size:15px;
+      opacity:.9;
+      margin:0;
+    }
+    @keyframes spin{to{transform:rotate(360deg)}}
 
-.spinner{
-  width:60px;
-  height:60px;
-  border:6px solid rgba(255,255,255,.3);
-  border-top:6px solid white;
-  border-radius:50%;
-  animation:spin 1s linear infinite;
-  margin-bottom:20px;
-}
+    .hero{
+      background:linear-gradient(135deg,var(--primary-dark),var(--primary));
+      color:#fff;
+      padding:56px 18px 124px;
+      position:relative;
+      overflow:hidden;
+      border-bottom-left-radius:42px;
+      border-bottom-right-radius:42px;
+    }
+    .hero::before,
+    .hero::after{
+      content:"";
+      position:absolute;
+      border-radius:50%;
+      background:rgba(255,255,255,.08);
+    }
+    .hero::before{
+      width:240px;
+      height:240px;
+      top:-70px;
+      left:-50px;
+    }
+    .hero::after{
+      width:220px;
+      height:220px;
+      right:-70px;
+      top:-20px;
+    }
+    .hero-inner{
+      max-width:1120px;
+      margin:auto;
+      text-align:center;
+      position:relative;
+      z-index:2;
+    }
+    .hero-badge{
+      display:inline-block;
+      padding:10px 18px;
+      background:rgba(255,255,255,.12);
+      border:1px solid rgba(255,255,255,.18);
+      border-radius:999px;
+      font-size:14px;
+      margin-bottom:18px;
+    }
+    .hero h1{
+      margin:0;
+      font-size:clamp(34px,5vw,60px);
+      line-height:1.3;
+    }
+    .hero-sub{
+      margin-top:14px;
+      font-size:clamp(20px,3vw,30px);
+      color:#F3EEFF;
+      font-weight:700;
+    }
 
-@keyframes spin{
-  to{transform:rotate(360deg)}
-}
+    .main-card{
+      max-width:1120px;
+      margin:-78px auto 28px;
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:var(--radius-xl);
+      box-shadow:var(--shadow);
+      padding:28px;
+      position:relative;
+      z-index:5;
+    }
 
-/* الهيدر */
-.hero{
-  background:linear-gradient(135deg,#5b3ee6,#8e6bff);
-  padding:80px 20px;
-  text-align:center;
-  color:white;
-  border-bottom-left-radius:40px;
-  border-bottom-right-radius:40px;
-}
+    .intro{
+      text-align:center;
+      margin-bottom:24px;
+    }
+    .intro p{
+      max-width:920px;
+      margin:0 auto 18px;
+      line-height:2;
+      font-size:18px;
+      color:var(--muted);
+    }
+    .motivation{
+      font-size:24px;
+      color:var(--primary-dark);
+      font-weight:700;
+      margin-bottom:18px;
+    }
 
-.hero h1{
-  font-size:36px;
-  margin-bottom:10px;
-}
+    .actions{
+      display:flex;
+      gap:12px;
+      justify-content:center;
+      flex-wrap:wrap;
+      margin-bottom:24px;
+    }
 
-.hero p{
-  opacity:.9;
-}
+    .btn{
+      border:none;
+      border-radius:14px;
+      padding:14px 24px;
+      font-size:16px;
+      font-weight:700;
+      cursor:pointer;
+      transition:.2s ease;
+    }
+    .btn:hover{transform:translateY(-2px)}
+    .btn-primary{
+      background:linear-gradient(135deg,var(--primary),var(--secondary));
+      color:#fff;
+    }
+    .btn-secondary{
+      background:var(--soft);
+      color:var(--primary-dark);
+      border:1px solid #DDD5FF;
+    }
 
-/* زر */
-.btn{
-  background:var(--primary);
-  color:white;
-  padding:14px 28px;
-  border:none;
-  border-radius:12px;
-  font-size:16px;
-  cursor:pointer;
-}
+    .features{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:14px;
+      margin-bottom:26px;
+    }
+    .feature{
+      background:#fff;
+      border:1px solid var(--border);
+      border-radius:22px;
+      padding:20px 14px;
+      text-align:center;
+      box-shadow:0 8px 20px rgba(30,42,120,.05);
+    }
+    .feature strong{
+      display:block;
+      font-size:24px;
+      color:var(--primary-dark);
+      margin-bottom:8px;
+    }
 
-/* البطاقات */
-.section{
-  padding:40px 20px;
-}
+    .section-head{
+      text-align:center;
+      margin-bottom:18px;
+    }
+    .section-head h2{
+      margin:0 0 10px;
+      color:var(--primary-dark);
+      font-size:38px;
+    }
+    .section-head p{
+      margin:0 auto;
+      max-width:760px;
+      color:var(--muted);
+      line-height:1.9;
+      font-size:17px;
+    }
 
-.cards{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:20px;
-}
+    .subjects{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:18px;
+    }
+    .subject-card{
+      background:#fff;
+      border:1px solid var(--border);
+      border-radius:24px;
+      padding:24px 18px;
+      text-align:center;
+      cursor:pointer;
+      transition:.2s ease;
+      box-shadow:0 8px 20px rgba(30,42,120,.05);
+    }
+    .subject-card:hover{
+      transform:translateY(-4px);
+      box-shadow:0 14px 28px rgba(30,42,120,.12);
+    }
+    .subject-icon{
+      width:88px;
+      height:88px;
+      margin:0 auto 14px;
+      border-radius:24px;
+      display:grid;
+      place-items:center;
+      background:var(--soft);
+      color:var(--primary);
+      font-size:40px;
+    }
+    .subject-card h3{
+      margin:0 0 10px;
+      font-size:28px;
+      color:var(--primary-dark);
+    }
+    .subject-card p{
+      margin:0;
+      color:var(--muted);
+      line-height:1.9;
+      font-size:16px;
+    }
 
-.card{
-  background:white;
-  padding:25px;
-  border-radius:16px;
-  text-align:center;
-  box-shadow:0 10px 30px rgba(0,0,0,.05);
-  cursor:pointer;
-}
+    .quiz-layout{
+      display:none;
+      max-width:1120px;
+      margin:0 auto 36px;
+      padding:0 18px;
+      grid-template-columns:1.35fr .65fr;
+      gap:18px;
+    }
+    .panel,.side-panel,.result-panel{
+      background:#fff;
+      border:1px solid var(--border);
+      border-radius:24px;
+      box-shadow:var(--shadow);
+    }
+    .panel{padding:24px}
+    .side-panel{padding:22px;height:fit-content}
+    .side-panel h3{
+      margin:0 0 12px;
+      color:var(--primary-dark);
+      font-size:24px;
+    }
 
-.card:hover{
-  transform:translateY(-5px);
-}
+    .top-row{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      flex-wrap:wrap;
+      gap:12px;
+      margin-bottom:16px;
+    }
+    .chip{
+      background:var(--soft);
+      color:var(--primary-dark);
+      border-radius:999px;
+      padding:10px 14px;
+      font-size:14px;
+      font-weight:700;
+    }
 
-/* الاختبار */
-.quiz{
-  display:none;
-  padding:20px;
-}
+    .progress-label{
+      display:flex;
+      justify-content:space-between;
+      color:var(--muted);
+      font-size:14px;
+      margin-bottom:8px;
+    }
+    .progress{
+      height:14px;
+      border-radius:999px;
+      background:#EAE6FA;
+      overflow:hidden;
+      margin-bottom:22px;
+    }
+    .progress-fill{
+      width:0%;
+      height:100%;
+      background:linear-gradient(90deg,var(--primary-dark),var(--primary));
+      transition:.25s ease;
+    }
 
-.question{
-  font-size:20px;
-  margin-bottom:15px;
-}
+    .question-title{
+      margin:0 0 14px;
+      font-size:30px;
+      line-height:1.8;
+      color:var(--primary-dark);
+    }
 
-.answers button{
-  display:block;
-  width:100%;
-  margin:10px 0;
-  padding:12px;
-  border-radius:10px;
-  border:1px solid #ddd;
-  background:white;
-  cursor:pointer;
-}
+    .figure-box{
+      display:none;
+      margin:16px 0 18px;
+      background:#FCFBFF;
+      border:1px solid #E8E1FB;
+      border-radius:22px;
+      min-height:150px;
+      padding:16px;
+      align-items:center;
+      justify-content:center;
+    }
+    .figure-box svg{
+      max-width:100%;
+      height:auto;
+      display:block;
+    }
 
-.answers button:hover{
-  background:var(--soft);
-}
+    .choices{
+      display:grid;
+      gap:12px;
+    }
+    .choice{
+      width:100%;
+      text-align:right;
+      padding:16px;
+      font-size:20px;
+      border-radius:16px;
+      border:2px solid #E7E1F8;
+      background:#fff;
+      color:var(--text);
+      cursor:pointer;
+      transition:.18s ease;
+    }
+    .choice:hover{
+      background:#FBF9FF;
+      border-color:#CFC1FF;
+    }
+    .choice.correct{
+      background:#ECFAF4;
+      border-color:#A7DFBF;
+      color:#147A53;
+      font-weight:700;
+    }
+    .choice.wrong{
+      background:#FFF3F3;
+      border-color:#F0B0B3;
+      color:#C94146;
+      font-weight:700;
+    }
 
-/* النتيجة */
-.result{
-  display:none;
-  text-align:center;
-  padding:40px;
-}
-</style>
+    .feedback{
+      display:none;
+      margin-top:16px;
+      padding:16px;
+      border-radius:16px;
+      border:1px solid #E7E1F8;
+      background:#FAF8FF;
+      color:var(--muted);
+      line-height:1.9;
+    }
+    .feedback.show{display:block}
+
+    .side-list{
+      display:grid;
+      gap:12px;
+    }
+    .side-item{
+      background:#FCFCFF;
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:14px;
+    }
+    .side-item strong{
+      display:block;
+      color:var(--primary-dark);
+      font-size:18px;
+      margin-bottom:6px;
+    }
+    .points{
+      color:var(--warning);
+      font-size:34px;
+      font-weight:700;
+    }
+
+    .result-wrap{
+      display:none;
+      max-width:920px;
+      margin:0 auto 36px;
+      padding:0 18px;
+    }
+    .result-panel{
+      padding:30px 24px;
+      text-align:center;
+    }
+    .result-badge{
+      width:96px;
+      height:96px;
+      margin:0 auto 16px;
+      border-radius:50%;
+      display:grid;
+      place-items:center;
+      background:linear-gradient(135deg,#ECE4FF,#D9CCFF);
+      color:var(--primary);
+      font-size:42px;
+    }
+    .result-panel h2{
+      margin:0 0 10px;
+      color:var(--primary-dark);
+      font-size:36px;
+    }
+
+    .score-grid{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:14px;
+      margin:22px 0;
+    }
+    .score-box{
+      background:#FCFCFF;
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:18px 12px;
+    }
+    .score-box strong{
+      display:block;
+      font-size:30px;
+      color:var(--primary-dark);
+      margin-bottom:8px;
+    }
+
+    .closing-note{
+      margin-top:18px;
+      background:#FCFCFF;
+      border:1px solid var(--border);
+      border-radius:22px;
+      padding:22px;
+      line-height:2;
+      color:var(--text);
+    }
+
+    @media (max-width:960px){
+      .features,.subjects,.quiz-layout,.score-grid{
+        grid-template-columns:1fr;
+      }
+      .main-card{
+        margin:-70px 16px 24px;
+      }
+      .quiz-layout,.result-wrap{
+        padding:0 16px;
+      }
+      .question-title{
+        font-size:24px;
+      }
+    }
+  </style>
 </head>
-
 <body>
 
-<!-- شاشة تحميل -->
-<div class="loader" id="loader">
-  <div class="spinner"></div>
-  <div>جاري تحميل المنصة...</div>
-</div>
-
-<!-- الصفحة الرئيسية -->
-<div class="hero">
-  <h1>منصة كريمة بنت همام الذكية</h1>
-  <p>منصة تدريبية رسمية لمحاكاة اختبارات نافس</p>
-</div>
-
-<div class="section">
-  <h2 style="text-align:center">اختاري المجال</h2>
-
-  <div class="cards">
-    <div class="card" onclick="startQuiz('math')">📘 الرياضيات</div>
-    <div class="card" onclick="startQuiz('reading')">📖 القراءة</div>
-    <div class="card" onclick="startQuiz('science')">🔬 العلوم</div>
+  <div id="loader">
+    <div class="loader-box">
+      <div class="loader-logo">منصة كريمة بنت همام الذكية</div>
+      <div class="spinner"></div>
+      <p class="loader-text">جاري تحميل المنصة...</p>
+      <p class="loader-sub">استعدي لتجربة تدريبية رسمية تحاكي نافس</p>
+    </div>
   </div>
-</div><div class="quiz" id="quiz">
 
-  <div id="questionBox"></div>
-  <div class="answers" id="answers"></div>
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="hero-badge">منصة تدريبية محاكية لنافس</div>
+      <h1>منصة كريمة بنت همام الذكية</h1>
+      <div class="hero-sub">منصة تدريبية رسمية لمحاكاة اختبارات نافس</div>
+    </div>
+  </header>
 
-  <button class="btn" onclick="nextQuestion()">التالي</button>
-</div>
+  <section class="main-card" id="homeSection">
+    <div class="intro">
+      <p>
+        منصة تدريبية رسمية لدعم طالبات المرحلة المتوسطة في الاستعداد لاختبارات نافس،
+        بأسئلة منظمة، ورسوم واضحة، وتغذية راجعة فورية، وتجربة مناسبة للجوال.
+      </p>
+      <div class="motivation">انطلقي نحو التميز الأكاديمي بثقة واستعداد</div>
+      <div class="actions">
+        <button class="btn btn-primary" onclick="scrollToSubjects()">ابدئي التدريب</button>
+      </div>
+    </div>
 
-<div class="result" id="result">
-  <h2 id="scoreText"></h2>
-  <p>رحلة تدريبية ملهمة، نحو أداءٍ متميز ومستقبلٍ واعد ✨</p>
+    <div class="features">
+      <div class="feature"><strong>رسمية</strong>واجهة احترافية</div>
+      <div class="feature"><strong>فورية</strong>تصحيح مباشر</div>
+      <div class="feature"><strong>واضحة</strong>رسوم داخلية ثابتة</div>
+      <div class="feature"><strong id="allCount">0</strong>عدد الأسئلة</div>
+    </div>
 
-  <hr>
+    <div class="section-head" id="subjectsAnchor">
+      <h2>اختاري المجال</h2>
+      <p>ابدئي بالمجال المناسب لك، ثم تابعي التقدم والنتيجة النهائية بصورة منظمة ورسمية.</p>
+    </div>
 
-  <p><strong>برعاية قائدة المدرسة</strong><br>
-  الأستاذة / ابتهال عبدالله الصاملي</p>
+    <div class="subjects">
+      <div class="subject-card" onclick="startQuiz('math')">
+        <div class="subject-icon">🔢</div>
+        <h3>الرياضيات</h3>
+        <p>أسئلة مهارية مع أشكال ورسومات واضحة وملونة.</p>
+      </div>
 
-  <p><strong>تصميم وإعداد</strong><br>
-  الأستاذة / مهاء يوسف الشهراني</p>
-</div>
+      <div class="subject-card" onclick="startQuiz('reading')">
+        <div class="subject-icon">📖</div>
+        <h3>القراءة</h3>
+        <p>فهم نصوص واستنتاج ومفردات وأساليب.</p>
+      </div>
 
-<script>
-let questions = {
-  math:[
-    {
-      q:"ما نوع المثلث؟",
-      img:"https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Right_triangle.svg/512px-Right_triangle.svg.png",
-      options:["حاد","قائم","منفرج","متساوي"],
-      answer:1
-    },
-    {
-      q:"كم ناتج 5 + 3 ؟",
-      options:["6","7","8","9"],
-      answer:2
+      <div class="subject-card" onclick="startQuiz('science')">
+        <div class="subject-icon">🧪</div>
+        <h3>العلوم</h3>
+        <p>مفاهيم علمية ورسوم توضيحية وتجارب وتفسير.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="quiz-layout" id="quizSection">
+    <div class="panel">
+      <div class="top-row">
+        <div class="chip" id="subjectName">المجال</div>
+        <div class="chip" id="questionNumber">السؤال 1 من 1</div>
+      </div>
+
+      <div class="progress-label">
+        <span>التقدم في التدريب</span>
+        <span id="progressText">0%</span>
+      </div>
+      <div class="progress"><div class="progress-fill" id="progressFill"></div></div>
+
+      <h2 class="question-title" id="questionTitle"></h2>
+      <div class="figure-box" id="figureBox"></div>
+      <div class="choices" id="choicesBox"></div>
+      <div class="feedback" id="feedbackBox"></div>
+
+      <div class="actions" style="justify-content:flex-start; margin-top:20px">
+        <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()">التالي</button>
+        <button class="btn btn-secondary" onclick="restartQuiz()">إعادة المحاولة</button>
+        <button class="btn btn-secondary" onclick="goHome()">العودة للرئيسية</button>
+      </div>
+    </div>
+
+    <aside class="side-panel">
+      <h3>معلومات التدريب</h3>
+      <div class="side-list">
+        <div class="side-item"><strong>المجال المختار</strong><span id="sideSubject">-</span></div>
+        <div class="side-item"><strong>عدد الأسئلة</strong><span id="sideCount">-</span></div>
+        <div class="side-item"><strong>الإجابات الصحيحة</strong><span id="sideScore">0</span></div>
+        <div class="side-item"><strong>النقاط</strong><span class="points" id="sidePoints">0</span></div>
+      </div>
+    </aside>
+  </section>
+
+  <section class="result-wrap" id="resultSection">
+    <div class="result-panel">
+      <div class="result-badge">🏆</div>
+      <h2>انتهى التدريب</h2>
+      <p id="resultSubject" style="font-size:18px;color:var(--muted)"></p>
+
+      <div class="score-grid">
+        <div class="score-box"><strong id="finalScore">0</strong>الإجابات الصحيحة</div>
+        <div class="score-box"><strong id="finalTotal">0</strong>إجمالي الأسئلة</div>
+        <div class="score-box"><strong id="finalPercent">0%</strong>نسبة الإتقان</div>
+        <div class="score-box"><strong id="finalPoints">0</strong>النقاط</div>
+      </div>
+
+      <p id="resultMessage" style="font-size:18px;line-height:1.9;color:var(--muted)"></p>
+
+      <div class="closing-note">
+        رحلة تدريبية ملهمة، نحو أداءٍ متميز ومستقبلٍ واعد، انسجامًا مع مستهدفات رؤية السعودية 2030.
+        <hr style="border:none;border-top:1px solid var(--border);margin:18px 0">
+        <strong>برعاية قائدة المدرسة</strong><br>
+        الأستاذة / ابتهال عبدالله الصاملي
+        <br><br>
+        <strong>تصميم وإعداد</strong><br>
+        الأستاذة / مهاء يوسف الشهراني
+      </div>
+
+      <div class="actions" style="margin-top:20px">
+        <button class="btn btn-primary" onclick="restartQuiz()">إعادة التدريب</button>
+        <button class="btn btn-secondary" onclick="goHome()">العودة للرئيسية</button>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    window.addEventListener("load", () => {
+      setTimeout(() => {
+        document.getElementById("loader").classList.add("hide");
+      }, 900);
+    });
+
+    const figures = {
+      triangleRight: `
+        <svg viewBox="0 0 320 180" xmlns="http://www.w3.org/2000/svg">
+          <rect width="320" height="180" rx="18" fill="#FBFAFF"/>
+          <polygon points="70,130 70,45 230,130" fill="#C7B8FF" stroke="#1E2A78" stroke-width="5"/>
+          <rect x="70" y="112" width="18" height="18" fill="#fff" stroke="#1E2A78" stroke-width="3"/>
+          <text x="150" y="156" text-anchor="middle" font-size="21" fill="#1F2440">قاعدة</text>
+          <text x="35" y="92" text-anchor="middle" font-size="21" fill="#1F2440" transform="rotate(-90 35 92)">ارتفاع</text>
+        </svg>
+      `,
+      rectangleGrid: `
+        <svg viewBox="0 0 320 180" xmlns="http://www.w3.org/2000/svg">
+          <rect width="320" height="180" rx="18" fill="#FBFAFF"/>
+          <rect x="80" y="50" width="160" height="80" fill="#E6DEFF" stroke="#1E2A78" stroke-width="4"/>
+          <text x="160" y="40" text-anchor="middle" font-size="18" fill="#1F2440">10 سم</text>
+          <text x="252" y="96" font-size="18" fill="#1F2440">5 سم</text>
+        </svg>
+      `,
+      bookText: `
+        <svg viewBox="0 0 340 150" xmlns="http://www.w3.org/2000/svg">
+          <rect width="340" height="150" rx="18" fill="#FBFAFF"/>
+          <path d="M70 30Q115 16 170 30V120Q120 108 70 120Z" fill="#E6DEFF" stroke="#1E2A78" stroke-width="4"/>
+          <path d="M170 30Q225 16 270 30V120Q220 108 170 120Z" fill="#F0EAFF" stroke="#1E2A78" stroke-width="4"/>
+          <line x1="170" y1="30" x2="170" y2="120" stroke="#1E2A78" stroke-width="4"/>
+          <text x="170" y="138" text-anchor="middle" font-size="16" fill="#1F2440">نص قرائي</text>
+        </svg>
+      `,
+      cell: `
+        <svg viewBox="0 0 280 190" xmlns="http://www.w3.org/2000/svg">
+          <rect width="280" height="190" rx="18" fill="#FBFAFF"/>
+          <ellipse cx="140" cy="95" rx="86" ry="52" fill="#CDB8FF" stroke="#1E2A78" stroke-width="5"/>
+          <circle cx="144" cy="95" r="24" fill="#6C4CF1"/>
+          <ellipse cx="100" cy="78" rx="13" ry="8" fill="#A78BFA"/>
+          <ellipse cx="184" cy="78" rx="14" ry="9" fill="#A78BFA"/>
+          <ellipse cx="172" cy="116" rx="16" ry="10" fill="#A78BFA"/>
+        </svg>
+      `,
+      beaker: `
+        <svg viewBox="0 0 260 220" xmlns="http://www.w3.org/2000/svg">
+          <rect width="260" height="220" rx="18" fill="#FBFAFF"/>
+          <path d="M95 30H165L150 56V158C150 173 140 182 130 182C120 182 110 173 110 158V56Z"
+            fill="#EFE7FF" stroke="#1E2A78" stroke-width="4"/>
+          <path d="M112 104C122 96 138 96 148 104V157C148 168 140 176 130 176C120 176 112 168 112 157Z"
+            fill="#8EC8FF"/>
+          <circle cx="122" cy="120" r="4" fill="#fff"/>
+          <circle cx="136" cy="132" r="6" fill="#fff"/>
+        </svg>
+      `
+    };
+
+    const banks = {
+      math: {
+        name: "الرياضيات",
+        questions: [
+          {
+            q: "ما نوع المثلث الموضح؟",
+            figure: "triangleRight",
+            choices: ["حاد الزوايا","قائم الزاوية","منفرج الزاوية","متساوي الأضلاع"],
+            answer: "قائم الزاوية",
+            note: "وجود علامة الزاوية القائمة يدل على أنه مثلث قائم الزاوية."
+          },
+          {
+            q: "إذا كان طول المستطيل 10 سم وعرضه 5 سم، فما مساحته؟",
+            figure: "rectangleGrid",
+            choices: ["15 سم²","50 سم²","20 سم²","10 سم²"],
+            answer: "50 سم²",
+            note: "مساحة المستطيل = الطول × العرض = 10 × 5 = 50 سم²."
+          },
+          {
+            q: "إذا كان 3س + 5 = 20، فما قيمة س؟",
+            figure: "",
+            choices: ["3","5","7","10"],
+            answer: "5",
+            note: "نطرح 5 من 20 ثم نقسم على 3، فيكون س = 5."
+          }
+        ]
+      },
+
+      reading: {
+        name: "القراءة",
+        questions: [
+          {
+            q: "أي خيار يُعد مهارة أساسية في فهم النص المقروء؟",
+            figure: "bookText",
+            choices: ["الاستنتاج","النسخ فقط","الحفظ دون فهم","تجاهل العنوان"],
+            answer: "الاستنتاج",
+            note: "الاستنتاج يساعد على فهم المعاني الضمنية والربط بين الأفكار."
+          },
+          {
+            q: "العنوان الجيد للنص يساعد القارئ على:",
+            figure: "",
+            choices: ["فهم الفكرة العامة","إهمال التفاصيل","إلغاء المعنى","عدم التركيز"],
+            answer: "فهم الفكرة العامة",
+            note: "العنوان يمهد للفكرة العامة للنص."
+          },
+          {
+            q: "إذا وردت كلمة واضحة في النص، فأقرب معنى لها هو:",
+            figure: "",
+            choices: ["غامضة","جلية","صعبة","بعيدة"],
+            answer: "جلية",
+            note: "كلمة واضحة تعني جلية أو ظاهرة المعنى."
+          }
+        ]
+      },
+
+      science: {
+        name: "العلوم",
+        questions: [
+          {
+            q: "ما هذا العضو أو التركيب الخلوي؟",
+            figure: "cell",
+            choices: ["نواة","ميتوكندريا","خلية","غشاء"],
+            answer: "ميتوكندريا",
+            note: "الميتوكندريا مسؤولة عن إنتاج الطاقة داخل الخلية."
+          },
+          {
+            q: "أي أداة مخبرية يظهرها الشكل؟",
+            figure: "beaker",
+            choices: ["ميزان","كأس مخبري","مجهر","ترمومتر"],
+            answer: "كأس مخبري",
+            note: "الشكل يوضح كأسًا مخبريًا يستخدم في خلط أو تسخين بعض المحاليل."
+          },
+          {
+            q: "أي التغيرات التالية يعد تغيرًا فيزيائيًا؟",
+            figure: "",
+            choices: ["انصهار الثلج","احتراق الورق","صدأ الحديد","تعفن الطعام"],
+            answer: "انصهار الثلج",
+            note: "الانصهار تغير في الحالة دون تكوّن مادة جديدة."
+          }
+        ]
+      }
+    };
+
+    const totalQuestions = Object.values(banks).reduce((sum, bank) => sum + bank.questions.length, 0);
+    document.getElementById("allCount").textContent = totalQuestions;
+
+    let currentBank = null;
+    let currentKey = "";
+    let currentIndex = 0;
+    let score = 0;
+    let points = 0;
+    let answered = false;
+
+    const homeSection = document.getElementById("homeSection");
+    const quizSection = document.getElementById("quizSection");
+    const resultSection = document.getElementById("resultSection");
+    const subjectName = document.getElementById("subjectName");
+    const questionNumber = document.getElementById("questionNumber");
+    const questionTitle = document.getElementById("questionTitle");
+    const figureBox = document.getElementById("figureBox");
+    const choicesBox = document.getElementById("choicesBox");
+    const feedbackBox = document.getElementById("feedbackBox");
+    const progressFill = document.getElementById("progressFill");
+    const progressText = document.getElementById("progressText");
+    const sideSubject = document.getElementById("sideSubject");
+    const sideCount = document.getElementById("sideCount");
+    const sideScore = document.getElementById("sideScore");
+    const sidePoints = document.getElementById("sidePoints");
+    const nextBtn = document.getElementById("nextBtn");
+
+    function scrollToSubjects(){
+      document.getElementById("subjectsAnchor").scrollIntoView({behavior:"smooth"});
     }
-  ],
 
-  science:[
-    {
-      q:"ما هذا العضو؟",
-      img:"https://upload.wikimedia.org/wikipedia/commons/4/4c/Mitochondrion_structure.svg",
-      options:["نواة","ميتوكندريا","خلية","غشاء"],
-      answer:1
+    function startQuiz(key){
+      currentKey = key;
+      currentBank = banks[key];
+      currentIndex = 0;
+      score = 0;
+      points = 0;
+      answered = false;
+
+      homeSection.style.display = "none";
+      resultSection.style.display = "none";
+      quizSection.style.display = "grid";
+
+      subjectName.textContent = currentBank.name;
+      sideSubject.textContent = currentBank.name;
+      sideCount.textContent = currentBank.questions.length;
+      sideScore.textContent = 0;
+      sidePoints.textContent = 0;
+
+      renderQuestion();
+      window.scrollTo({top:0, behavior:"smooth"});
     }
-  ],
 
-  reading:[
-    {
-      q:"اختاري المعنى الصحيح لكلمة (سريع)",
-      options:["بطيء","نشيط","متأخر","ضعيف"],
-      answer:1
+    function renderQuestion(){
+      const q = currentBank.questions[currentIndex];
+      answered = false;
+
+      questionNumber.textContent = `السؤال ${currentIndex + 1} من ${currentBank.questions.length}`;
+      questionTitle.textContent = q.q;
+      choicesBox.innerHTML = "";
+      feedbackBox.className = "feedback";
+      feedbackBox.textContent = "";
+      nextBtn.textContent = currentIndex === currentBank.questions.length - 1 ? "إنهاء" : "التالي";
+
+      const percent = Math.round((currentIndex / currentBank.questions.length) * 100);
+      progressFill.style.width = percent + "%";
+      progressText.textContent = percent + "%";
+
+      if(q.figure && figures[q.figure]){
+        figureBox.style.display = "flex";
+        figureBox.innerHTML = figures[q.figure];
+      } else {
+        figureBox.style.display = "none";
+        figureBox.innerHTML = "";
+      }
+
+      q.choices.forEach(choice => {
+        const btn = document.createElement("button");
+        btn.className = "choice";
+        btn.textContent = choice;
+        btn.onclick = () => chooseAnswer(btn, choice, q.answer, q.note);
+        choicesBox.appendChild(btn);
+      });
     }
-  ]
-};
 
-let current=0;
-let score=0;
-let selected=[];
+    function chooseAnswer(button, selected, correct, note){
+      if(answered) return;
+      answered = true;
 
-function startQuiz(type){
-  document.querySelector('.section').style.display="none";
-  document.getElementById('quiz').style.display="block";
-  selected = questions[type];
-  current=0;
-  score=0;
-  loadQuestion();
-}
+      [...document.querySelectorAll(".choice")].forEach(btn => {
+        btn.disabled = true;
+        if(btn.textContent === correct) btn.classList.add("correct");
+      });
 
-function loadQuestion(){
-  let q = selected[current];
+      if(selected !== correct){
+        button.classList.add("wrong");
+      } else {
+        score++;
+        points += 10;
+      }
 
-  let html = "<div class='question'>"+q.q+"</div>";
+      sideScore.textContent = score;
+      sidePoints.textContent = points;
 
-  if(q.img){
-    html += "<img src='"+q.img+"' style='max-width:200px;margin:10px'>";
-  }
+      feedbackBox.className = "feedback show";
+      feedbackBox.innerHTML = `<strong>الإجابة الصحيحة:</strong> ${correct}<br><strong>التوضيح:</strong> ${note}`;
+    }
 
-  document.getElementById('questionBox').innerHTML = html;
+    function nextQuestion(){
+      if(!answered) return;
+      currentIndex++;
+      if(currentIndex < currentBank.questions.length){
+        renderQuestion();
+      } else {
+        showResult();
+      }
+    }
 
-  let answersHTML="";
-  q.options.forEach((opt,i)=>{
-    answersHTML += `<button onclick="checkAnswer(${i})">${opt}</button>`;
-  });
+    function showResult(){
+      quizSection.style.display = "none";
+      resultSection.style.display = "block";
 
-  document.getElementById('answers').innerHTML = answersHTML;
-}
+      const total = currentBank.questions.length;
+      const percent = Math.round((score / total) * 100);
 
-function checkAnswer(i){
-  if(i === selected[current].answer){
-    score++;
-  }
-}
+      document.getElementById("resultSubject").textContent = `المجال: ${currentBank.name}`;
+      document.getElementById("finalScore").textContent = score;
+      document.getElementById("finalTotal").textContent = total;
+      document.getElementById("finalPercent").textContent = `${percent}%`;
+      document.getElementById("finalPoints").textContent = points;
 
-function nextQuestion(){
-  current++;
-  if(current < selected.length){
-    loadQuestion();
-  }else{
-    showResult();
-  }
-}
+      let msg = "";
+      if(percent >= 85){
+        msg = `ممتاز جدًا. حصلتِ على ${points} نقطة، وهذا يدل على استعداد قوي ومتميز.`;
+      } else if(percent >= 60){
+        msg = `أداء جيد جدًا. حصلتِ على ${points} نقطة، ومع مزيد من التدريب سترتفع نسبة الإتقان أكثر.`;
+      } else {
+        msg = `بداية موفقة. حصلتِ على ${points} نقطة، أعيدي التدريب وراجعي التغذية الراجعة بعد كل سؤال.`;
+      }
+      document.getElementById("resultMessage").textContent = msg;
+      window.scrollTo({top:0, behavior:"smooth"});
+    }
 
-function showResult(){
-  document.getElementById('quiz').style.display="none";
-  document.getElementById('result').style.display="block";
-  document.getElementById('scoreText').innerText = "نتيجتك: "+score;
-}
+    function restartQuiz(){
+      if(!currentKey) return;
+      startQuiz(currentKey);
+    }
 
-/* إزالة شاشة التحميل */
-window.onload = ()=>{
-  setTimeout(()=>{
-    document.getElementById('loader').style.display="none";
-  },1000);
-}
-</script>
-
+    function goHome(){
+      quizSection.style.display = "none";
+      resultSection.style.display = "none";
+      homeSection.style.display = "block";
+      window.scrollTo({top:0, behavior:"smooth"});
+    }
+  </script>
 </body>
 </html>
