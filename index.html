@@ -354,7 +354,8 @@
       align-items:center;
       justify-content:center;
     }
-    .figure-box svg{
+    .figure-box svg,
+    .figure-box img{
       max-width:100%;
       height:auto;
       display:block;
@@ -640,13 +641,7 @@
 
     const figures = {
       triangleRight: `
-        <svg viewBox="0 0 320 180" xmlns="http://www.w3.org/2000/svg">
-          <rect width="320" height="180" rx="18" fill="#FBFAFF"/>
-          <polygon points="70,130 70,45 230,130" fill="#C7B8FF" stroke="#1E2A78" stroke-width="5"/>
-          <rect x="70" y="112" width="18" height="18" fill="#fff" stroke="#1E2A78" stroke-width="3"/>
-          <text x="150" y="156" text-anchor="middle" font-size="21" fill="#1F2440">قاعدة</text>
-          <text x="35" y="92" text-anchor="middle" font-size="21" fill="#1F2440" transform="rotate(-90 35 92)">ارتفاع</text>
-        </svg>
+        <img src="images/q1.jpeg" alt="شكل المثلث" style="max-width:100%; height:auto; display:block; margin:auto; border-radius:16px;">
       `,
       rectangleGrid: `
         <svg viewBox="0 0 320 180" xmlns="http://www.w3.org/2000/svg">
@@ -928,3 +923,4 @@
   </script>
 </body>
 </html>
+هذا الكود رتبته عدله ولا غلط ولا يصلح وكيف نشوف الصورة تطلع فيهแก้ไข added images/q1.jpeg, q10.jpeg props to figures and now asks if code is correct. Need answer addressing that it's correct and should show if files exist. Mention maybe path and commit. concise.
