@@ -117,15 +117,35 @@ function check(choice){
   }
 }
 
-/* سؤال تجريبي */
-addQuestion({
-  q: "كم ناتج 10 + 5 ؟",
-  choices: ["12","13","15","20"],
-  answer: "15",
-  note: "10 + 5 = 15"
-});
+  let currentIndex = 0;
 
-/* تشغيل */
+function addQuestions(list){
+  banks.math.questions.push(...list);
+}
+
+addQuestions([
+  {
+    q: "كم ناتج 10 + 5 ؟",
+    choices: ["12","13","15","20"],
+    answer: "15",
+    note: "10 + 5 = 15"
+  },
+  {
+    q: "إذا كان محيط مربع 20 سم، فما طول ضلعه؟",
+    choices: ["4","5","6","10"],
+    answer: "5",
+    note: "طول الضلع = المحيط ÷ 4 = 20 ÷ 4 = 5."
+  },
+  {
+    q: "إذا كان 3س = 18، فما قيمة س؟",
+    choices: ["3","6","9","12"],
+    answer: "6",
+    note: "نقسم 18 على 3 فنحصل على 6."
+  },
+  {
+    q: "كم يساوي 25% من 80؟",
+    choices: ["10","15","20","25"],
+    answer: "20
 startTest();
 </script>
 </body>
