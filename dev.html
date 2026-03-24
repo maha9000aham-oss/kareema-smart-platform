@@ -3,126 +3,66 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>منصة كريمة الذكية</title>
+<title>تجربة الأسئلة</title>
 
 <style>
 body {
-  margin:0;
   font-family: Arial;
   background:#F5F4FB;
+  margin:0;
 }
 
-/* اختصار الشكل لتجنب التعليق */
-.hidden{display:none}
+/* مكان عرض السؤال */
+#app {
+  max-width:600px;
+  margin:50px auto;
+  background:#fff;
+  padding:20px;
+  border-radius:15px;
+  text-align:center;
+  box-shadow:0 10px 25px rgba(0,0,0,0.1);
+}
+
+button {
+  display:block;
+  width:100%;
+  padding:10px;
+  margin:8px 0;
+  font-size:16px;
+  border:none;
+  border-radius:10px;
+  background:#eee;
+  cursor:pointer;
+}
+
+button:hover {
+  background:#ddd;
+}
 </style>
+
 </head>
 
 <body>
 
+<h1 style="text-align:center;">منصة التجربة</h1>
+
 <div id="app"></div>
+
 <script>
+
+/* ===== بنك الأسئلة ===== */
 const banks = {
   math: {
-    name: "الرياضيات",
     questions: []
   }
 };
 
-/* نظام مرن */
-function normalizeQuestion(q){
-  return {
-    q: q.q,
-    choices: q.choices || [],
-    answer: q.answer,
-    note: q.note || "",
-    media: q.media || {type:"none"}
-  };
-}
-
-/* عرض */
-function renderQuestion(q){
-  const app = document.getElementById("app");
-
-  app.innerHTML = `
-    <h2>${q.q}</h2>
-    ${q.choices.map(c => `<button onclick="check('${c}')">${c}</button>`).join("<br>")}
-    <div id="feedback"></div>
-  `;
-}
-
-/* تحقق */
-let current = 0;
-
-function check(choice){
-  const q = banks.math.questions[current];
-  const fb = document.getElementById("feedback");
-
-  if(choice === q.answer){
-    fb.innerHTML = "✅ صحيح<br>" + q.note;
-  } else {
-    fb.innerHTML = "❌ خطأ<br>" + q.note;
-  }
-}
-  /* إضافة أسئلة بدون لخبطة */
+/* ===== إضافة عدة أسئلة ===== */
 function addQuestions(list){
   banks.math.questions.push(...list);
 }
 
-/* مثال سؤال */
-addQuestions([
-  {
-    q: "كم ناتج 5 + 3 ؟",
-    choices: ["6","7","8","9"],
-    answer: "8",
-    note: "5 + 3 = 8"
-  }
-]);
-
-renderQuestion(banks.math.questions[0]);
-</script>
-<script>
-/* ===== نظام الأسئلة الجديد ===== */
-
-const banks = {
-  math: {
-    name: "الرياضيات",
-    questions: []
-  }
-};
-
-/* إضافة سؤال */
-function addQuestion(q){
-  banks.math.questions.push(q);
-}
-
-/* عرض أول سؤال للتجربة */
-function startTest(){
-  const q = banks.math.questions[0];
-  document.body.innerHTML = `
-    <h2>${q.q}</h2>
-    ${q.choices.map(c => `<button onclick="check('${c}')">${c}</button>`).join("<br>")}
-    <div id="fb"></div>
-  `;
-}
-
-/* تحقق */
-function check(choice){
-  const q = banks.math.questions[0];
-  const fb = document.getElementById("fb");
-
-  if(choice === q.answer){
-    fb.innerHTML = "✅ صحيح<br>" + q.note;
-  } else {
-    fb.innerHTML = "❌ خطأ<br>" + q.note;
-  }
-}
-
-  let currentIndex = 0;
-
-function addQuestions(list){
-  banks.math.questions.push(...list);
-}
-
+/* ===== أسئلة تجريبية ===== */
 addQuestions([
   {
     q: "كم ناتج 10 + 5 ؟",
@@ -131,22 +71,61 @@ addQuestions([
     note: "10 + 5 = 15"
   },
   {
-    q: "إذا كان محيط مربع 20 سم، فما طول ضلعه؟",
-    choices: ["4","5","6","10"],
-    answer: "5",
-    note: "طول الضلع = المحيط ÷ 4 = 20 ÷ 4 = 5."
-  },
-  {
-    q: "إذا كان 3س = 18، فما قيمة س؟",
-    choices: ["3","6","9","12"],
-    answer: "6",
-    note: "نقسم 18 على 3 فنحصل على 6."
-  },
-  {
-    q: "كم يساوي 25% من 80؟",
-    choices: ["10","15","20","25"],
-    answer: "20
+    q: "كم ناتج 8 + 3 ؟",
+    choices: ["10","11","12","13"],
+    answer: "11",
+    note: "8 + 3 = 11"
+  }
+]);
+
+/* ===== المتغير الحالي ===== */
+let currentIndex = 0;
+
+/* ===== عرض السؤال ===== */
+function startTest(){
+  const q = banks.math.questions[currentIndex];
+
+  document.getElementById("app").innerHTML = `
+    <h2>${q.q}</h2>
+
+    ${q.choices.map(c => 
+      `<button onclick="check('${c}')">${c}</button>`
+    ).join("")}
+
+    <div id="fb" style="margin-top:15px;"></div>
+
+    <button onclick="nextQuestion()">التالي</button>
+  `;
+}
+
+/* ===== التحقق ===== */
+function check(choice){
+  const q = banks.math.questions[currentIndex];
+  const fb = document.getElementById("fb");
+
+  if(choice === q.answer){
+    fb.innerHTML = "✅ إجابة صحيحة<br>" + q.note;
+  } else {
+    fb.innerHTML = "❌ إجابة خاطئة<br>" + q.note;
+  }
+}
+
+/* ===== الانتقال ===== */
+function nextQuestion(){
+  currentIndex++;
+
+  if(currentIndex >= banks.math.questions.length){
+    document.getElementById("app").innerHTML = "<h2>انتهت الأسئلة</h2>";
+    return;
+  }
+
+  startTest();
+}
+
+/* ===== تشغيل ===== */
 startTest();
+
 </script>
+
 </body>
 </html>
