@@ -1254,7 +1254,28 @@ note: ": الميتوكندريا هي العضية المسؤولة عن إنت
 <br>
 ${q.q}
 `;
-      const passageContainer = document.getElementById("reading-passage");
+ const passageContainer = document.getElementById("reading-passage");
+      if (currentKey === "reading") {
+  passageContainer.innerHTML = `
+    <div dir="rtl" style="line-height:2;font-size:18px">
+
+      <b>كتب الجيل القادم</b><br><br>
+
+      تشير الإحصائيات أنه في عام 2008، وللمرة الأولى في التاريخ، تغلبت مبيعات الكتب الإلكترونية في أمازون على الكتب الورقية.
+
+      <br><br>
+
+      واليوم، أصبحت الكتب الإلكترونية المسروقة أو المتاحة مجانًا على الإنترنت بصيغة PDF تفوق الكتب الورقية بنسبة كبيرة في الولايات المتحدة الأمريكية.
+
+      <br><br>
+
+      لكن الأمور بدأت تتغير مع ظهور الشبكة العنكبوتية، فظهر الكتاب الإلكتروني، مما جعل البعض يشعر بالقلق من اختفاء الكتاب الورقي، إلا أنه لا يزال صامدًا حتى الآن.
+
+    </div>
+  `;
+} else {
+  passageContainer.innerHTML = "";
+}
 speechSynthesis.cancel();
 // قراءة قطعة القراءة فقط
 if (currentKey === "reading" && passages.readingPassage1) {
