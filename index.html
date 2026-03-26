@@ -1249,7 +1249,11 @@ note: ": الميتوكندريا هي العضية المسؤولة عن إنت
       answered = false;
 
       questionNumber.textContent = `السؤال ${currentIndex + 1} من ${currentBank.questions.length}`;
-      questionTitle.textContent = q.q;
+      questionTitle.innerHTML = `
+<div id="reading-passage"></div>
+<br>
+${q.q}
+`;
       // إيقاف أي قراءة سابقة
 speechSynthesis.cancel();
 
