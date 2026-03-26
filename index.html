@@ -1256,7 +1256,9 @@ ${q.q}
 `;
       const passageContainer = document.getElementById("reading-passage");
 
-if (currentKey === "reading") {
+} else {
+  passageContainer.innerHTML = "";
+}
   passageContainer.innerHTML = `
   <div id="reader" dir="rtl" style="line-height:2;font-size:18px">
 
