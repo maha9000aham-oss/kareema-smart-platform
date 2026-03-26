@@ -1673,19 +1673,32 @@ ${q.q}
     homeSection.style.display = "block";
     window.scrollTo({top:0, behavior:"smooth"});
   }
-    function startReading() {
+  let currentUtterance = null;
+
+function startReading() {
   const reader = document.getElementById("reader");
   if (!reader) return;
 
-  const text = reader.innerText;
+  const text = reader.textContent.trim();
+  if (!text) return;
 
   window.speechSynthesis.cancel();
 
-  const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = "ar-SA";
-  utterance.rate = 0.9;
+  currentUtterance = new SpeechSynthesisUtterance(text);
+  currentUtterance.lang = "ar-SA";
+  currentUtterance.rate = 0.9;
+  currentUtterance.pitch = 1;
+  currentUtterance.volume = 1;
 
-  window.speechSynthesis.speak(utterance);
+  const voices = window.speechSynthesis.getVoices();
+  const arabicVoice = voices.find(v => v.lang && v.lang.startsWith("ar"));
+  if (arabicVoice) {
+    currentUtterance.voice = arabicVoice;
+  }
+
+  setTimeout(() => {
+    window.speechSynthesis.speak(currentUtterance);
+  }, 100);
 }
 
 function stopReading() {
