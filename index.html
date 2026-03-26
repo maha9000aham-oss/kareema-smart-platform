@@ -1673,37 +1673,6 @@ ${q.q}
     homeSection.style.display = "block";
     window.scrollTo({top:0, behavior:"smooth"});
   }
-let currentUtterance = null;
-function startReading() {
-  const reader = document.getElementById("reading-passage");
-  if (!reader) return;
-
-  const text = reader.textContent.trim();
-  if (!text) return;
-
-  window.speechSynthesis.cancel();
-
-  currentUtterance = new SpeechSynthesisUtterance(text);
-  currentUtterance.lang = "ar-SA";
-  currentUtterance.rate = 0.9;
-  currentUtterance.pitch = 1;
-  currentUtterance.volume = 1;
-
-  const voices = window.speechSynthesis.getVoices();
-  const arabicVoice = voices.find(v => v.lang && v.lang.startsWith("ar"));
-  if (arabicVoice) {
-    currentUtterance.voice = arabicVoice;
-  }
-
-  setTimeout(() => {
-    window.speechSynthesis.speak(currentUtterance);
-  }, 100);
-}
-
-function stopReading() {
-  window.speechSynthesis.cancel();
-}
-    window.speechSynthesis.getVoices();
 </script>
 </body>
 </html>
