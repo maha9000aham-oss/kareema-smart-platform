@@ -1268,21 +1268,14 @@ ${q.q}
       واليوم، أصبحت الكتب الإلكترونية المسروقة أو المتاحة مجانًا على الإنترنت بصيغة PDF تفوق الكتب الورقية بنسبة كبيرة في الولايات المتحدة الأمريكية.
 
       <br><br>
-
+      
       لكن الأمور بدأت تتغير مع ظهور الشبكة العنكبوتية، فظهر الكتاب الإلكتروني، مما جعل البعض يشعر بالقلق من اختفاء الكتاب الورقي، إلا أنه لا يزال صامدًا حتى الآن.
-
+<button onclick="startReading()">🎧 استمع</button>
+<button onclick="stopReading()">⏹ إيقاف</button>
     </div>
   `;
 } else {
   passageContainer.innerHTML = "";
-}
-speechSynthesis.cancel();
-// قراءة قطعة القراءة فقط
-if (currentKey === "reading" && passages.readingPassage1) {
-  const utterance = new SpeechSynthesisUtterance(passages.readingPassage1);
-  utterance.lang = "ar-SA";
-  utterance.rate = 0.9;
-  speechSynthesis.speak(utterance);
 }
       choicesBox.innerHTML = "";
       feedbackBox.className = "feedback";
