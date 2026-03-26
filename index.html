@@ -1250,6 +1250,16 @@ note: ": الميتوكندريا هي العضية المسؤولة عن إنت
 
       questionNumber.textContent = `السؤال ${currentIndex + 1} من ${currentBank.questions.length}`;
       questionTitle.textContent = q.q;
+      // إيقاف أي قراءة سابقة
+speechSynthesis.cancel();
+
+// قراءة قطعة القراءة فقط
+if (currentKey === "reading" && passages.readingPassage1) {
+  const utterance = new SpeechSynthesisUtterance(passages.readingPassage1);
+  utterance.lang = "ar-SA";
+  utterance.rate = 0.9;
+  speechSynthesis.speak(utterance);
+}
       choicesBox.innerHTML = "";
       feedbackBox.className = "feedback";
       feedbackBox.textContent = "";
