@@ -1244,26 +1244,18 @@ note: ": الميتوكندريا هي العضية المسؤولة عن إنت
       window.scrollTo({top:0, behavior:"smooth"});
     }
 
-    function renderQuestion(){
-      const q = currentBank.questions[currentIndex];
-      answered = false;
+  function renderQuestion(){
+  const q = currentBank.questions[currentIndex];
+  answered = false;
 
-      questionNumber.textContent = `السؤال ${currentIndex + 1} من ${currentBank.questions.length}`;
-      questionTitle.innerHTML = `
-<div id="reading-passage"></div>
-<br>
-${q.q}
-`;
-passageContainer.innerHTML = "";
-      
-} else {
-  passageContainer.innerHTML = "";
+  questionNumber.textContent = `السؤال ${currentIndex + 1} من ${currentBank.questions.length}`;
+  questionTitle.innerHTML = q.q;
+
+  choicesBox.innerHTML = "";
+  feedbackBox.className = "feedback";
+  feedbackBox.textContent = "";
+  nextBtn.textContent = currentIndex === currentBank.questions.length - 1 ? "إنهاء" : "التالي";
 }
-      choicesBox.innerHTML = "";
-      feedbackBox.className = "feedback";
-      feedbackBox.textContent = "";
-      nextBtn.textContent = currentIndex === currentBank.questions.length - 1 ? "إنهاء" : "التالي";
-
       const percent = Math.round((currentIndex / currentBank.questions.length) * 100);
       progressFill.style.width = percent + "%";
       progressText.textContent = percent + "%";
