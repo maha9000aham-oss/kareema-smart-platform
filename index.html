@@ -1,3 +1,6 @@
+note: التوضيح: هذا ملف `index.html` كامل بعد تعديل جزء القراءة بحيث يظهر عنوان **قصة أخوين** في الوسط وبخط كبير ولون بنفسجي، ومعالجة تداخل النص، وإظهار الصورة، وتفعيل تظليل الكلمات بلون أصفر باهت أثناء تشغيل الصوت. خطوات الحل: انسخي الكود كاملًا كما هو واستبدلي به ملف `index.html`. المهارة: تعديل واجهة HTML/CSS/JavaScript وربط النص بالصوت بشكل تفاعلي.
+
+```html
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -363,6 +366,61 @@
       display:block;
     }
 
+    .reading-wrap{
+      width:100%;
+      max-width:900px;
+      margin:auto;
+    }
+
+    .reading-title{
+      text-align:center;
+      font-size:34px;
+      font-weight:700;
+      color:#6C4CF1;
+      margin:0 0 16px;
+      line-height:1.6;
+    }
+
+    .reading-image{
+      width:100%;
+      max-width:760px;
+      display:block;
+      margin:0 auto 14px;
+      border-radius:18px;
+    }
+
+    .reading-audio{
+      width:100%;
+      margin:0 0 18px;
+    }
+
+    .reading-text{
+      width:100%;
+      font-size:22px;
+      line-height:2.4;
+      color:#1F2440;
+      text-align:right;
+      word-break:normal;
+      overflow-wrap:anywhere;
+      white-space:normal;
+    }
+
+    .reading-paragraph{
+      margin:0 0 18px;
+    }
+
+    .word{
+      display:inline-block;
+      padding:2px 4px;
+      margin:1px 0;
+      border-radius:6px;
+      transition:background-color .18s ease;
+    }
+
+    .word.active{
+      background:#FFF3A6;
+    }
+
     .choices{
       display:grid;
       gap:12px;
@@ -498,6 +556,13 @@
       }
       .question-title{
         font-size:24px;
+      }
+      .reading-title{
+        font-size:28px;
+      }
+      .reading-text{
+        font-size:20px;
+        line-height:2.2;
       }
     }
   </style>
@@ -719,15 +784,82 @@
         </video>
       `,
       readingPassage2: `
-        <div dir="rtl" style="line-height:2; font-size:18px; width:100%;">
-          <img src="images/two_brothers_story.png" alt="قصة الأخوين" style="width:100%; margin-bottom:10px;">
-          <audio controls style="width:100%; margin-bottom:10px;">
+        <div class="reading-wrap" dir="rtl">
+          <h3 class="reading-title">قصة أخوين</h3>
+          <img src="images/two_brothers_story.png" alt="قصة الأخوين" class="reading-image">
+          <audio id="readingAudio" controls class="reading-audio">
             <source src="media/text3_two_brothers_audio.mp3" type="audio/mpeg">
           </audio>
-          ${passages.readingPassage2}
+          <div id="readingText" class="reading-text"></div>
         </div>
       `
     };
+
+    function setupReadingSync(){
+      const textBox = document.getElementById("readingText");
+      const audio = document.getElementById("readingAudio");
+      if(!textBox || !audio) return;
+
+      const raw = passages.readingPassage2.trim();
+      const paragraphs = raw
+        .split(/<br\s*\/?><br\s*\/?>/i)
+        .map(p => p.replace(/<br\s*\/?>/gi, " ").trim())
+        .filter(Boolean);
+
+      let allWords = [];
+      textBox.innerHTML = "";
+
+      paragraphs.forEach(paragraph => {
+        const p = document.createElement("p");
+        p.className = "reading-paragraph";
+
+        const words = paragraph.split(/\s+/).filter(Boolean);
+        words.forEach((word, index) => {
+          const span = document.createElement("span");
+          span.className = "word";
+          span.textContent = word;
+          p.appendChild(span);
+          allWords.push(span);
+
+          if(index < words.length - 1){
+            p.appendChild(document.createTextNode(" "));
+          }
+        });
+
+        textBox.appendChild(p);
+      });
+
+      function clearActive(){
+        allWords.forEach(word => word.classList.remove("active"));
+      }
+
+      function updateHighlight(){
+        if(!audio.duration || allWords.length === 0) return;
+
+        const ratio = audio.currentTime / audio.duration;
+        const activeIndex = Math.min(
+          allWords.length - 1,
+          Math.floor(ratio * allWords.length)
+        );
+
+        clearActive();
+
+        for(let i = 0; i <= activeIndex; i++){
+          allWords[i].classList.add("active");
+        }
+
+        allWords[activeIndex]?.scrollIntoView({
+          block:"nearest",
+          inline:"nearest"
+        });
+      }
+
+      audio.addEventListener("timeupdate", updateHighlight);
+      audio.addEventListener("seeked", updateHighlight);
+      audio.addEventListener("ended", () => {
+        clearActive();
+      });
+    }
 
     const banks = {
       math: {
@@ -1299,6 +1431,10 @@
       if(q.figure && figures[q.figure]){
         figureBox.style.display = "flex";
         figureBox.innerHTML = figures[q.figure];
+
+        if(q.figure === "readingPassage2"){
+          setupReadingSync();
+        }
       } else {
         figureBox.style.display = "none";
         figureBox.innerHTML = "";
