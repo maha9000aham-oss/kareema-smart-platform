@@ -1414,14 +1414,13 @@ note: ": الميتوكندريا هي العضية المسؤولة عن إنت
       if(!currentKey) return;
       startQuiz(currentKey);
     }
+function goHome(){
+  quizSection.style.display = "none";
+  resultSection.style.display = "none";
+  homeSection.style.display = "block";
+  window.scrollTo({top:0, behavior:"smooth"});
+}
 
-    function goHome(){
-      quizSection.style.display = "none";
-      resultSection.style.display = "none";
-      homeSection.style.display = "block";
-      window.scrollTo({top:0, behavior:"smooth"});
-    }
-<script>
 window.addEventListener("load", () => {
   setTimeout(() => {
     document.getElementById("loader").classList.add("hide");
@@ -1430,3 +1429,4 @@ window.addEventListener("load", () => {
 </script>
 </body>
 </html>
+    
