@@ -1373,7 +1373,7 @@ function chooseAnswer(button, selected, correct, note){
   sidePoints.textContent = points;
 
   feedbackBox.className = "feedback show";
-  feedbackBox.innerHTML = `<strong>الإجابة الصحيحة:</strong> ${correct}<br><strong>التوضيح:</strong> ${note}`;
+  feedbackBox.innerHTML = `<strong>الإجابة الصحيحة:</strong> ${correct}<br>${note}`;
 }
 
 function nextQuestion(){
