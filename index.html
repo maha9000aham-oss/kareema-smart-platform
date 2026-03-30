@@ -1266,60 +1266,60 @@ note: ": الميتوكندريا هي العضية المسؤولة عن إنت
 ]
 }
 };
-    const totalQuestions = Object.values(banks).reduce((sum, bank) => sum + bank.questions.length, 0);
-    document.getElementById("allCount").textContent = totalQuestions;
+const totalQuestions = Object.values(banks).reduce((sum, bank) => sum + bank.questions.length, 0);
+document.getElementById("allCount").textContent = totalQuestions;
 
-    let currentBank = null;
-    let currentKey = "";
-    let currentIndex = 0;
-    let score = 0;
-    let points = 0;
-    let answered = false;
+let currentBank = null;
+let currentKey = "";
+let currentIndex = 0;
+let score = 0;
+let points = 0;
+let answered = false;
 
-    const homeSection = document.getElementById("homeSection");
-    const quizSection = document.getElementById("quizSection");
-    const resultSection = document.getElementById("resultSection");
-    const subjectName = document.getElementById("subjectName");
-    const questionNumber = document.getElementById("questionNumber");
-    const questionTitle = document.getElementById("questionTitle");
-    const figureBox = document.getElementById("figureBox");
-    const choicesBox = document.getElementById("choicesBox");
-    const feedbackBox = document.getElementById("feedbackBox");
-    const progressFill = document.getElementById("progressFill");
-    const progressText = document.getElementById("progressText");
-    const sideSubject = document.getElementById("sideSubject");
-    const sideCount = document.getElementById("sideCount");
-    const sideScore = document.getElementById("sideScore");
-    const sidePoints = document.getElementById("sidePoints");
-    const nextBtn = document.getElementById("nextBtn");
+const homeSection = document.getElementById("homeSection");
+const quizSection = document.getElementById("quizSection");
+const resultSection = document.getElementById("resultSection");
+const subjectName = document.getElementById("subjectName");
+const questionNumber = document.getElementById("questionNumber");
+const questionTitle = document.getElementById("questionTitle");
+const figureBox = document.getElementById("figureBox");
+const choicesBox = document.getElementById("choicesBox");
+const feedbackBox = document.getElementById("feedbackBox");
+const progressFill = document.getElementById("progressFill");
+const progressText = document.getElementById("progressText");
+const sideSubject = document.getElementById("sideSubject");
+const sideCount = document.getElementById("sideCount");
+const sideScore = document.getElementById("sideScore");
+const sidePoints = document.getElementById("sidePoints");
+const nextBtn = document.getElementById("nextBtn");
 
-    function scrollToSubjects(){
-      document.getElementById("subjectsAnchor").scrollIntoView({behavior:"smooth"});
-    }
+function scrollToSubjects(){
+  document.getElementById("subjectsAnchor").scrollIntoView({behavior:"smooth"});
+}
 
-    function startQuiz(key){
-      currentKey = key;
-      currentBank = banks[key];
-      currentIndex = 0;
-      score = 0;
-      points = 0;
-      answered = false;
+function startQuiz(key){
+  currentKey = key;
+  currentBank = banks[key];
+  currentIndex = 0;
+  score = 0;
+  points = 0;
+  answered = false;
 
-      homeSection.style.display = "none";
-      resultSection.style.display = "none";
-      quizSection.style.display = "grid";
+  homeSection.style.display = "none";
+  resultSection.style.display = "none";
+  quizSection.style.display = "grid";
 
-      subjectName.textContent = currentBank.name;
-      sideSubject.textContent = currentBank.name;
-      sideCount.textContent = currentBank.questions.length;
-      sideScore.textContent = 0;
-      sidePoints.textContent = 0;
+  subjectName.textContent = currentBank.name;
+  sideSubject.textContent = currentBank.name;
+  sideCount.textContent = currentBank.questions.length;
+  sideScore.textContent = 0;
+  sidePoints.textContent = 0;
 
-      renderQuestion();
-      window.scrollTo({top:0, behavior:"smooth"});
-    }
+  renderQuestion();
+  window.scrollTo({top:0, behavior:"smooth"});
+}
 
-  function renderQuestion(){
+function renderQuestion(){
   const q = currentBank.questions[currentIndex];
   answered = false;
 
@@ -1330,90 +1330,92 @@ note: ": الميتوكندريا هي العضية المسؤولة عن إنت
   feedbackBox.className = "feedback";
   feedbackBox.textContent = "";
   nextBtn.textContent = currentIndex === currentBank.questions.length - 1 ? "إنهاء" : "التالي";
+
+  const percent = Math.round((currentIndex / currentBank.questions.length) * 100);
+  progressFill.style.width = percent + "%";
+  progressText.textContent = percent + "%";
+
+  if(q.figure && figures[q.figure]){
+    figureBox.style.display = "flex";
+    figureBox.innerHTML = figures[q.figure];
+  } else {
+    figureBox.style.display = "none";
+    figureBox.innerHTML = "";
+  }
+
+  q.choices.forEach(choice => {
+    const btn = document.createElement("button");
+    btn.className = "choice";
+    btn.textContent = choice;
+    btn.onclick = () => chooseAnswer(btn, choice, q.answer, q.note);
+    choicesBox.appendChild(btn);
+  });
 }
-      const percent = Math.round((currentIndex / currentBank.questions.length) * 100);
-      progressFill.style.width = percent + "%";
-      progressText.textContent = percent + "%";
 
-      if(q.figure && figures[q.figure]){
-        figureBox.style.display = "flex";
-        figureBox.innerHTML = figures[q.figure];
-      } else {
-        figureBox.style.display = "none";
-        figureBox.innerHTML = "";
-      }
+function chooseAnswer(button, selected, correct, note){
+  if(answered) return;
+  answered = true;
 
-      q.choices.forEach(choice => {
-        const btn = document.createElement("button");
-        btn.className = "choice";
-        btn.textContent = choice;
-        btn.onclick = () => chooseAnswer(btn, choice, q.answer, q.note);
-        choicesBox.appendChild(btn);
-      });
-    }
+  [...document.querySelectorAll(".choice")].forEach(btn => {
+    btn.disabled = true;
+    if(btn.textContent === correct) btn.classList.add("correct");
+  });
 
-    function chooseAnswer(button, selected, correct, note){
-      if(answered) return;
-      answered = true;
+  if(selected !== correct){
+    button.classList.add("wrong");
+  } else {
+    score++;
+    points += 10;
+  }
 
-      [...document.querySelectorAll(".choice")].forEach(btn => {
-        btn.disabled = true;
-        if(btn.textContent === correct) btn.classList.add("correct");
-      });
+  sideScore.textContent = score;
+  sidePoints.textContent = points;
 
-      if(selected !== correct){
-        button.classList.add("wrong");
-      } else {
-        score++;
-        points += 10;
-      }
+  feedbackBox.className = "feedback show";
+  feedbackBox.innerHTML = `<strong>الإجابة الصحيحة:</strong> ${correct}<br><strong>التوضيح:</strong> ${note}`;
+}
 
-      sideScore.textContent = score;
-      sidePoints.textContent = points;
+function nextQuestion(){
+  if(!answered) return;
+  currentIndex++;
+  if(currentIndex < currentBank.questions.length){
+    renderQuestion();
+  } else {
+    showResult();
+  }
+}
 
-      feedbackBox.className = "feedback show";
-      feedbackBox.innerHTML = `<strong>الإجابة الصحيحة:</strong> ${correct}<br><strong>التوضيح:</strong> ${note}`;
-    }
+function showResult(){
+  quizSection.style.display = "none";
+  resultSection.style.display = "block";
 
-    function nextQuestion(){
-      if(!answered) return;
-      currentIndex++;
-      if(currentIndex < currentBank.questions.length){
-        renderQuestion();
-      } else {
-        showResult();
-      }
-    }
+  const total = currentBank.questions.length;
+  const percent = Math.round((score / total) * 100);
 
-    function showResult(){
-      quizSection.style.display = "none";
-      resultSection.style.display = "block";
+  document.getElementById("resultSubject").textContent = `المجال: ${currentBank.name}`;
+  document.getElementById("finalScore").textContent = score;
+  document.getElementById("finalTotal").textContent = total;
+  document.getElementById("finalPercent").textContent = `${percent}%`;
+  document.getElementById("finalPoints").textContent = points;
 
-      const total = currentBank.questions.length;
-      const percent = Math.round((score / total) * 100);
+  let msg = "";
+  if(percent >= 85){
+    msg = `ممتاز جدًا. حصلتِ على ${points} نقطة، وهذا يدل على استعداد قوي ومتميز.`;
+  } else if(percent >= 60){
+    msg = `أداء جيد جدًا. حصلتِ على ${points} نقطة، ومع مزيد من التدريب سترتفع نسبة الإتقان أكثر.`;
+  } else {
+    msg = `بداية موفقة. حصلتِ على ${points} نقطة، أعيدي التدريب وراجعي التغذية الراجعة بعد كل سؤال.`;
+  }
 
-      document.getElementById("resultSubject").textContent = `المجال: ${currentBank.name}`;
-      document.getElementById("finalScore").textContent = score;
-      document.getElementById("finalTotal").textContent = total;
-      document.getElementById("finalPercent").textContent = `${percent}%`;
-      document.getElementById("finalPoints").textContent = points;
+  document.getElementById("resultMessage").textContent = msg;
+  window.scrollTo({top:0, behavior:"smooth"});
+}
 
-      let msg = "";
-      if(percent >= 85){
-        msg = `ممتاز جدًا. حصلتِ على ${points} نقطة، وهذا يدل على استعداد قوي ومتميز.`;
-      } else if(percent >= 60){
-        msg = `أداء جيد جدًا. حصلتِ على ${points} نقطة، ومع مزيد من التدريب سترتفع نسبة الإتقان أكثر.`;
-      } else {
-        msg = `بداية موفقة. حصلتِ على ${points} نقطة، أعيدي التدريب وراجعي التغذية الراجعة بعد كل سؤال.`;
-      }
-      document.getElementById("resultMessage").textContent = msg;
-      window.scrollTo({top:0, behavior:"smooth"});
-    }
+function restartQuiz(){
+  if(!currentKey) return;
+  startQuiz(currentKey);
+}
 
-    function restartQuiz(){
-      if(!currentKey) return;
-      startQuiz(currentKey);
-    }
 function goHome(){
   quizSection.style.display = "none";
   resultSection.style.display = "none";
@@ -1429,4 +1431,3 @@ window.addEventListener("load", () => {
 </script>
 </body>
 </html>
-    
